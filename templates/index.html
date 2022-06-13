@@ -1,0 +1,254 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+<head class="x-admin-sm">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+        <script type="text/javascript" src="../static/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+
+    <script type="text/javascript" src="/static/lib/layui/lay/modules/layer.js"></script>
+    <script type="text/javascript" src="/static/lib/layui/lay/modules/element.js"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+
+
+     <meta http-equiv="cache-control" content="no-cache">
+
+    <title>云协同作战系统</title>
+
+</head>
+<body class="index">
+<!-- 顶部开始 -->
+<div class="container">
+    <div class="logo">
+        <a href="/">云协同作战系统</a></div>
+    <div class="left_open">
+        <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+    </div>
+
+    <ul class="layui-nav right" lay-filter="">
+        <li class="layui-nav-item">
+            <a id="username">{{ request.session.info.name }}</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                 <dd>   <a onclick="logout()" href="/logout/" class="close-all" data-type="closeall">退出</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<!-- 左侧菜单开始 -->
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li >
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="数据管理">&#xe70c;</i>
+                    <cite>数据管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('数据导入','/upload_page', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>数据导入</cite></a>
+                    </li>
+{#                    <li>#}
+{#                        <a onclick="xadmin.add_tab('数据查询','/search', true)">#}
+{#                            <i class="iconfont">&#xe6a7;</i>#}
+{#                            <cite>数据查询</cite></a>#}
+{#                    </li>#}
+                    <li>
+                        <a onclick="xadmin.add_tab('动态index查询','/war_search', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>动态index查询</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('动态plane查询','/plane_search', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>动态plane查询</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('全局index查询','/index_list', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>全局index查询</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('静态初始帧查询','/frame_list', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>静态初始帧查询</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('态势指标标记','/index_mark', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>态势指标标记</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('胜场统计','/win_info', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>胜场统计</cite></a>
+                    </li>
+
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="模型优化">&#xe6f4;</i>
+                    <cite>模型优化</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('指标与能效关系分析','/chart_v2', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>指标与能效关系分析</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('指标间关系分析','/community_data', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>指标间关系分析</cite></a>
+                    </li>
+
+                    <li>
+                        <a onclick="xadmin.add_tab('社区数据挖掘','/comm_dig', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>社区数据挖掘</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('一体化模型','/predict_formal/', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>一体化模型</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('外部算法调用','/al_run/', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>外部算法调用</cite></a>
+                    </li>
+                </ul>
+            </li>
+                        <li>
+                <a href="javascript:;">
+                    <i class="layui-icon" lay-tips="态势分析">&#xe665;</i>
+                    <cite>态势分析</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('态势识别','/pos_reg', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>态势识别</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('态势预测','/pos_pre', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>态势预测</cite></a>
+                    </li>
+
+                    <li>
+                </ul>
+            </li>
+
+            <li id="privilegediv">
+                <a href="javascript:;">
+                    <i class="layui-icon" lay-tips="用户管理">&#xe66f;</i>
+                    <cite>用户管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('用户管理','/admin_manage', true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>用户管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div class="x-slide_left"></div> -->
+<!-- 左侧菜单结束 -->
+<!-- 右侧主体开始 -->
+<div class="page-content">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li class="home">
+                <i class="layui-icon">&#xe68e;</i>首页
+            </li>
+        </ul>
+        <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
+            <dl>
+                <dd data-type="this">关闭当前</dd>
+                <dd data-type="other">关闭其它</dd>
+                <dd data-type="all">关闭全部</dd>
+            </dl>
+        </div>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src='/headpage' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+        </div>
+        <div id="tab_show"></div>
+    </div>
+</div>
+<div class="page-content-bg"></div>
+<style id="theme_style"></style>
+
+<!-- 右侧主体结束 -->
+<!-- 中部结束 -->
+
+
+</body>
+<script>
+    {% if request.session.info.privilege != 0 %}
+
+    document.getElementById('privilegediv').style.display='none';
+    {% endif %}
+</script>
+    <script>
+		function logout() {
+                layui.use('element', function () {
+                    var $ = layui.jquery;
+                    var element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
+                    var layer = layui.layer;
+                    var active = {
+                        //在这里给active绑定事件，后面可通过active调用这些事件
+                        tabDeleteAll: function (ids) {//删除所有
+                            $.each(ids, function (i, item) {
+                                element.tabDelete("xbs_tab", item);//ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+                            })
+                        }
+                    };
+
+                    $(".close-all").click(function () {
+                        if ($(this).attr("data-type") == "closeall") {
+                            var tabtitle = $(".layui-tab-title li");
+                            var ids = new Array();
+                            $.each(tabtitle, function (i) {
+                                ids[i] = $(this).attr("lay-id");
+                            });
+                            active.tabDeleteAll(ids);
+                        }
+
+        })
+    });
+
+		}
+
+	</script>
+
+
+
+
+    <script type="text/javascript">
+
+    </script>
+
+</html>
+
+
+

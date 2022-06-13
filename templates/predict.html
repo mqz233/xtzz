@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<script src="/static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="input-group mb-3" style="width: 50%">
+                        <label class="input-group-text" for="inputGroupSelect01">选择作战场次</label>
+                        <select class="form-select" name="war_name" form="choose" id="war_name">
+                            <option selected>...</option>
+                            {% for key in war_name_list %}
+                                　　
+                                <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                            {% endfor %}
+                        </select>
+                        {#                        &nbsp;#}
+{#                        <label class="input-group-text" for="inputGroupSelect01">选择预测方式</label>#}
+{#                        <select class="form-select" name="y" form="choose" id="predict_method">#}
+{#                            <option selected>...</option>#}
+{#                            <option value="0">静态</option>#}
+{#                            <option value="1">静态+时序</option>#}
+{#                            只有前端接口，无高维指标，无后端实现#}
+{#                            <option value="2">静态+时序+高维指标</option>#}
+{#                        </select>#}
+                        {#                        &nbsp;&nbsp;&nbsp;#}
+                        <form action="/predict_formal/" method="post" id="choose">
+                            <button class="btn btn-primary">&nbsp;预&nbsp;&nbsp;&nbsp;测&nbsp;</button>
+                        </form>
+
+                    </div>
+                    <br><br>
+
+                    <div class="layui-card-body " id="main" style="width: 100%;height:780px;"></div>
+
+                    <br><br>
+                     <br><br>
+
+                    <div class="layui-card-body " id="main2" style="width: 100%;height:780px;"></div>
+
+                    <br><br>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    // 预测曲线
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        backgroundColor:'#E8E8D0',
+        title: {
+            text: '红方一体化模型预测曲线'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['实际', '下一帧预测', '结果预测','静态结果预测']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: true,
+            data: {{ x | safe }},
+            name: '帧数',
+            nameLocation: 'center'
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: true,
+            name: '平台存活数',
+            nameLocation: 'center',
+            {#scale: true,#}
+        },
+        series: [
+            {
+                name: '实际',
+                type: 'line',
+                data: {{ y1 | safe }},lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '下一帧预测',
+                type: 'line',
+                data: {{ y2 | safe }},lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '结果预测',
+                type: 'line',
+                data: {{ y3 | safe }},lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '静态结果预测',
+                type: 'line',
+                data: {{ y4 | safe }},lineStyle: { normal:{
+                width: 6}
+                }
+            }
+
+
+        ]
+    };
+    myChart.setOption(option);
+    window.onresize = myChart.resize;
+    {#//loss曲线#}
+    {# var myChart = echarts.init(document.getElementById('loss'));#}
+    {##}
+    {#// 指定图表的配置项和数据#}
+    {#var option = {#}
+    {#    title: {#}
+    {#        text: 'loss曲线'#}
+    {#    },#}
+    {#    tooltip: {#}
+    {#        trigger: 'axis'#}
+    {#    },#}
+    {#    legend: {#}
+    {#        data: ['loss']#}
+    {#    },#}
+    {#    grid: {#}
+    {#        left: '3%',#}
+    {#        right: '4%',#}
+    {#        bottom: '3%',#}
+    {#        containLabel: true#}
+    {#    },#}
+    {#    toolbox: {#}
+    {#        feature: {#}
+    {#            saveAsImage: {}#}
+    {#        }#}
+    {#    },#}
+    {#    xAxis: {#}
+    {#        type: 'category',#}
+    {#        boundaryGap: true,#}
+    {#        data: {{ x | safe }},#}
+    {#        name: '帧数',#}
+    {#        nameLocation: 'center'#}
+    {#    },#}
+    {#    yAxis: {#}
+    {#        type: 'value',#}
+    {#        boundaryGap: true,#}
+    {#        name: 'loss',#}
+    {#        nameLocation: 'center',#}
+            {#scale: true,#}
+    {#    },#}
+    {#    series: [#}
+    {#        {#}
+    {#            name: 'loss',#}
+    {#            type: 'line',#}
+    {#            data: {{ y4 | safe }}#}
+    {#        }#}
+    {#    ]#}
+    {##}
+    {##}
+    {#// 使用刚指定的配置项和数据显示图表。#}
+    {#myChart.setOption(option);#}
+</script>
+<script type="text/javascript">
+    // 预测曲线
+    var myChart = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        backgroundColor:	'#ECF5FF',
+        title: {
+            text: '蓝方一体化模型预测曲线'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['实际', '下一帧预测', '结果预测','静态结果预测']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '7%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: true,
+            data: {{ x | safe }},
+            name: '帧数',
+            nameLocation: 'center'
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: true,
+            name: '平台存活数',
+            nameLocation: 'center',
+            {#scale: true,#}
+        },
+        series: [
+            {
+                name: '实际',
+                type: 'line',
+                data: {{ y5 | safe }},
+                lineStyle: { normal:{
+                width: 6}
+                }
+
+            },
+            {
+                name: '下一帧预测',
+                type: 'line',
+                data: {{ y6 | safe }},
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '结果预测',
+                type: 'line',
+                data: {{ y7 | safe }},
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '静态结果预测',
+                type: 'line',
+                data: {{ y8 | safe }},
+                lineStyle: { normal:{
+                width: 6}
+                }
+            }
+
+
+        ]
+    };
+    myChart.setOption(option);
+    window.onresize = myChart.resize;
+    {#//loss曲线#}
+    {# var myChart = echarts.init(document.getElementById('loss'));#}
+    {##}
+    {#// 指定图表的配置项和数据#}
+    {#var option = {#}
+    {#    title: {#}
+    {#        text: 'loss曲线'#}
+    {#    },#}
+    {#    tooltip: {#}
+    {#        trigger: 'axis'#}
+    {#    },#}
+    {#    legend: {#}
+    {#        data: ['loss']#}
+    {#    },#}
+    {#    grid: {#}
+    {#        left: '3%',#}
+    {#        right: '4%',#}
+    {#        bottom: '3%',#}
+    {#        containLabel: true#}
+    {#    },#}
+    {#    toolbox: {#}
+    {#        feature: {#}
+    {#            saveAsImage: {}#}
+    {#        }#}
+    {#    },#}
+    {#    xAxis: {#}
+    {#        type: 'category',#}
+    {#        boundaryGap: true,#}
+    {#        data: {{ x | safe }},#}
+    {#        name: '帧数',#}
+    {#        nameLocation: 'center'#}
+    {#    },#}
+    {#    yAxis: {#}
+    {#        type: 'value',#}
+    {#        boundaryGap: true,#}
+    {#        name: 'loss',#}
+    {#        nameLocation: 'center',#}
+            {#scale: true,#}
+    {#    },#}
+    {#    series: [#}
+    {#        {#}
+    {#            name: 'loss',#}
+    {#            type: 'line',#}
+    {#            data: {{ y4 | safe }}#}
+    {#        }#}
+    {#    ]#}
+    {##}
+    {##}
+    {#// 使用刚指定的配置项和数据显示图表。#}
+    {#myChart.setOption(option);#}
+</script>
+
+
+</body>
+</html>

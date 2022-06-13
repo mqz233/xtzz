@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <script src="/static/js/echarts.min.js"></script>
+        <link rel="stylesheet" href="/static/css/charts.css">
+        <link rel="stylesheet" href="/static/css/font.css">
+        <link rel="stylesheet" href="/static/css/xadmin.css">
+        <link rel="stylesheet" href="/static/css/theme5.css">
+        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/js/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/xadmin.js"></script>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <script src="/static/js/bootstrap.min.js"></script>
+
+    </head>
+</head>
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="input-group mb-3" style="width: 60%">
+                        <label class="input-group-text" for="inputGroupSelect01">选择tag</label>
+                        <select class="form-select" name="tag_name" form="choose" id="war_name">
+                            {% if tag_name %}
+                                <option >...</option>
+                            {% else %}
+                                <option selected>...</option>
+                            {% endif %}
+                            {% for key in tag_list %}
+                                {% if tag_name == key %}
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelect01">选择属性</label>
+                        <select class="form-select" name="x_aris" form="choose" id="x_aris">
+                            <option selected id="fault_choice">...</option>
+{#                            <option id="诱饵僚机（光电）-最大探测距离" value="诱饵僚机（光电）-最大探测距离">诱饵僚机（光电）-最大探测距离</option>#}
+{#                            <option id="诱饵僚机（光电）-最大探测角度" value="诱饵僚机（光电）-最大探测角度">诱饵僚机（光电）-最大探测角度</option>#}
+{#                            <option id="诱饵僚机（光电）-位置精度" value="诱饵僚机（光电）-位置精度">诱饵僚机（光电）-位置精度</option>#}
+{#                            <option id="诱饵僚机（光电）-角度精度" value="诱饵僚机（光电）-角度精度">诱饵僚机（光电）-角度精度</option>#}
+{#                            <option id="攻击僚机（雷达）-最大探测距离" value="攻击僚机（雷达）-最大探测距离">攻击僚机（雷达）-最大探测距离</option>#}
+{#                            <option id="攻击僚机（雷达）-最大探测角度" value="攻击僚机（雷达）-最大探测角度">攻击僚机（雷达）-最大探测角度</option>#}
+{#                            <option id="攻击僚机（雷达）-位置精度" value="攻击僚机（雷达）-位置精度">攻击僚机（雷达）-位置精度</option>#}
+{#                            <option id="攻击僚机（雷达）-角度精度" value="攻击僚机（雷达）-角度精度">攻击僚机（雷达）-角度精度</option>#}
+{#                            <option id="预警机-最大探测距离" value="预警机-最大探测距离">预警机-最大探测距离</option>#}
+{#                            <option id="预警机-最大探测角度" value="预警机-最大探测角度">预警机-最大探测角度</option>#}
+{#                            <option id="预警机-位置精度" value="预警机-位置精度">预警机-位置精度</option>#}
+{#                            <option id="预警机-角度精度" value="预警机-角度精度">预警机-角度精度</option>#}
+{#                            诱饵僚机（电磁）-假目标数量,无人制空僚机（电子战）-最小干扰距离,无人制空僚机（电子战）-最大干扰角度,无人制空僚机（电子战）-压制效果,无人预警僚机-最小干扰距离,无人预警僚机-最大干扰角度,无人预警僚机-压制效果#}
+                            <option id="诱饵僚机（电磁）-假目标数量" value="诱饵僚机（电磁）-假目标数量">诱饵僚机（电磁）-假目标数量</option>
+                            <option id="无人制空僚机（电子战）-最小干扰距离" value="无人制空僚机（电子战）-最小干扰距离">无人制空僚机（电子战）-最小干扰距离</option>
+                            <option id="无人制空僚机（电子战）-最大干扰角度" value="无人制空僚机（电子战）-最大干扰角度">无人制空僚机（电子战）-最大干扰角度</option>
+                            <option id="无人制空僚机（电子战）-压制效果" value="无人制空僚机（电子战）-压制效果">无人制空僚机（电子战）-压制效果</option>
+                            <option id="无人预警僚机-最小干扰距离" value="无人预警僚机-最小干扰距离">无人预警僚机-最小干扰距离</option>
+                            <option id="无人预警僚机-最大干扰角度" value="无人预警僚机-最大干扰角度">无人预警僚机-最大干扰角度</option>
+                            <option id="无人预警僚机-压制效果" value="无人预警僚机-压制效果">无人预警僚机-压制效果</option>
+{#光电探测僚机-最大截获距离,光电探测僚机-最大截获角度,无人制空僚机（雷达）-最大截获距离,无人制空僚机（雷达）-最大截获角度,无人制空僚机-导弹数量,无人制空僚机-最大攻击距离,无人制空僚机-最小攻击距离#}
+                            <option id="光电探测僚机-最大截获距离" value="光电探测僚机-最大截获距离">光电探测僚机-最大截获距离</option>
+                            <option id="光电探测僚机-最大截获角度" value="光电探测僚机-最大截获角度">光电探测僚机-最大截获角度</option>
+                            <option id="无人制空僚机（雷达）-最大截获距离" value="无人制空僚机（雷达）-最大截获距离">无人制空僚机（雷达）-最大截获距离</option>
+                            <option id="无人制空僚机（雷达）-最大截获角度" value="无人制空僚机（雷达）-最大截获角度">无人制空僚机（雷达）-最大截获角度</option>
+                            <option id="无人制空僚机-导弹数量" value="无人制空僚机-导弹数量">无人制空僚机-导弹数量</option>
+                            <option id="无人制空僚机-最大攻击距离" value="无人制空僚机-最大攻击距离">无人制空僚机-最大攻击距离</option>
+                            <option id="无人制空僚机-最小攻击距离" value="无人制空僚机-最小攻击距离">无人制空僚机-最小攻击距离</option>
+                        </select>
+                        <form action="/community_data/" method="post" id="choose">
+                            <button class="btn btn-primary">&nbsp;生&nbsp;&nbsp;&nbsp;成&nbsp;</button>
+                        </form>
+
+                    </div>
+
+
+                    <div>
+                        <div id="charts" style="width:70%; height:780px;float:left;" class="layui-card-body"></div>
+                        <div style="width:30%; float:left;">
+{#                            <table id="demo" lay-filter="test"></table>#}
+{#                            <table class="layui-table" lay-size="sm" lay-filter="demo">#}
+                        <table lay-filter="demo">
+{#                          <colgroup>#}
+{#                            <col width="150">#}
+{#                            <col width="200">#}
+{#                            <col>#}
+{#                          </colgroup>#}
+                          <thead>
+                            <tr>
+                                <th lay-data="{field:'number', width:75}">数字</th>
+                                <th lay-data="{field:'name', width:500}">名称</th>
+{#                              <th>数字</th>#}
+{#                              <th>名称</th>#}
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for key,value in namedic.items %}
+
+                            <tr>
+                              <td>{{ key }}</td>
+                              <td>{{ value }}</td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                        </div>
+                    </div>
+{#                    <div class="layui-card-body ">#}
+{##}
+{#                    </div>#}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    layui.use('table', function(){
+  var table = layui.table;
+
+//转换静态表格
+table.init('demo', {
+  height: 700 //设置高度
+  ,limit: 1000 //注意：请务必确保 limit 参数（默认：10）是与你服务端限定的数据条数一致
+  //支持所有基础参数
+});
+
+});
+
+
+</script>
+<script>
+    console.log('{{ x_name }}')
+    if ('{{ x_name }}') {
+        document.getElementById('fault_choice').innerText = '{{x_name}}'
+        document.getElementById('fault_choice').value = '{{x_name}}'
+        document.getElementById('{{x_name}}').style.display = "none"
+    }
+
+
+</script>
+<script>
+    console.log('{{ x_name }}')
+    var chartDom = document.getElementById('charts');
+    var myChart = echarts.init(chartDom);
+    var option;
+    // myChart.showLoading();
+    {#// $.get({{ res }}, function(graph) {#}
+    //   myChart.hideLoading();
+    //   graph.nodes.forEach(function (node) {
+    //     node.symbolSize = 5;
+    //   });
+    var res =
+    {{ res|safe }}
+    {#var res  = JSON.parse({{ res | safe }})#}
+    {#console.log(x)#}
+    {#console.log(res)#}
+    if (res !== {}) {
+
+        myChart.showLoading();
+
+        myChart.hideLoading();
+        {#graph.nodes.forEach(function (node) {#}
+        {#  node.symbolSize = 5;#}
+        {##}
+        {#);#}
+
+        option = {
+            backgroundColor:	'#ECF5FF',
+            title: {
+                text: '关系分析图',
+                subtext: 'Default layout',
+                top: 'bottom',
+                left: 'right'
+            },
+            tooltip: {},
+            legend: [
+                {
+                    // selectedMode: 'single',
+                    data: res.categories.map(function (a) {
+                        return a.name;
+                    })
+                }
+            ],
+            series: [
+                {
+                    {#itemStyle : {#}
+                    {#            normal : {#}
+                    {#                lineStyle:{#}
+                    {#                    color:'#FFFFFF'#}
+                    {#                }#}
+                    {#            } },#}
+                    type: 'graph',
+                    layout: 'force',
+                    data: res.nodes,
+                    links: res.links,
+                    categories: res.categories,
+                    roam: true,
+                    label: {
+                        position: 'inside',
+                        show: 'false'
+                    },
+                    force: {
+                        repulsion: 1,
+                        gravity: 0.03,
+                    },
+                    scaleLimit: {                       //所属组件的z分层，z值小的图形会被z值大的图形覆盖
+                        min: 0.005,                          //最小的缩放值
+                        max: 0.1,                            //最大的缩放值
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    ;
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+    window.onresize = myChart.resize;
+
+    {#document.getElementById('fault_choice').innerText = x2_name#}
+    {#document.getElementById('fault_choice').value = {{x_name}}#}
+    {#    document.getElementById('{{x_name}}').style.display = "none"#}
+</script>
+
+</body>
+</html>

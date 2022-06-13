@@ -1,0 +1,360 @@
+{% load myapp_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+</head>
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="input-group mb-3" style="width: 100%">
+{#                        数据集选择#}
+                        <label class="input-group-text" >选择数据集</label>
+                        <select class="form-select" name="dataset" form="choose" id="dataset">
+                            {% if sel_dataset %}
+                            <option >...</option>
+                            {% else %}
+                            <option selected>...</option>
+                            {% endif %}
+
+                            {% for key in dataset %}
+                            {% if key == sel_dataset %}　　
+                                <option selected value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                            {% else %}
+                                <option value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+{#                        模型选择#}
+                        <label class="input-group-text" >选择模型</label>
+                        <select class="form-select" name="model" form="choose" id="model">
+                            {% if sel_model %}
+                            <option >...</option>
+                            {% else %}
+                            <option selected>...</option>
+                            {% endif %}
+                            {% for key in model %}
+                            {% if key == sel_model %}    　　
+                                <option selected value="{{ key}}" hassubinfo="true">{{ key }}</option>
+                            {% else %}
+                                <option value="{{ key}}" hassubinfo="true">{{ key }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+
+                    </div>
+                    <div class="input-group mb-3" style="width: 100%">
+                        <div class="layui-form-item" style="width: 33%">
+                            <label class="layui-form-label">batch_size</label>
+                            <div class="layui-input-block">
+                              <input type="number" id="batch_size" form="choose" name="batch_size" required  lay-verify="required" placeholder="请输入batch_size，例如：64" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="width: 33%">
+                            <label class="layui-form-label">学习率</label>
+                            <div class="layui-input-block">
+                              <input type="text" id="lr"  form="choose" name="lr" required  lay-verify="required" placeholder="请输入学习率，例如：0.01" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="width: 33%">
+                            <label class="layui-form-label">epochs</label>
+                            <div class="layui-input-block">
+                              <input type="number" id="epochs" form="choose" name="epochs" required  lay-verify="required" placeholder="请输入epochs，例如：100" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                    <form action="/pos_reg/" method="post" id="choose">
+                            {% csrf_token %}
+                            <button class="btn btn-primary">&nbsp;训练模型&nbsp;</button>
+                    </form>
+                </div>
+
+                <div class="input-group mb-3" style="width: 50%">
+                <select class="form-select" id="select_table">
+                    <option selected>...</option>
+                    {% if frame %}
+
+                    {% for key in frame %}
+                                　　
+                                <option value="{{ key }}" hassubinfo="true">第{{ key|add:"1" }}帧到第{{ key|add:"5" }}帧</option>
+                    {% endfor %}
+                    {% endif %}
+</select>
+                </div>
+                    <br><br>
+
+<!--                    展示的图表1-->
+                    <div class="layui-card-body " id="main" style="width: 100%;height:780px;"></div>
+
+                    <br><br>
+                     <br><br>
+<!--                    展示的图表2-->
+                    <div class="layui-card-body " id="main2" style="width: 100%;height:780px;"></div>
+
+                    <br><br>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+<!--    实现逻辑 存储所有的帧标签信息，生成每5帧展示一次柱状图-->
+    function group(array, subGroupLength) {
+      let index = 0;
+      let newArray = [];
+      while(index < array.length) {
+          newArray.push(array.slice(index, index += subGroupLength));
+      }
+      return newArray;
+  }
+
+$(function(){
+            $("#select_table").change(function(){
+                var start_frame =  $("#select_table").val();
+                var frame_list = [start_frame+1,start_frame+2,start_frame+3,start_frame+4,start_frame+5]
+                console.log(start_frame)
+                var reg_list = {{ y1 }};
+                var actual_list = {{ y2 }};
+                var new_reg_list = group(reg_list,5)
+                var new_actual_list = group(actual_list,5)
+                var app = {};
+
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+
+const posList = [
+  'left',
+  'right',
+  'top',
+  'bottom',
+  'inside',
+  'insideTop',
+  'insideLeft',
+  'insideRight',
+  'insideBottom',
+  'insideTopLeft',
+  'insideTopRight',
+  'insideBottomLeft',
+  'insideBottomRight'
+];
+app.configParameters = {
+  rotate: {
+    min: -90,
+    max: 90
+  },
+  align: {
+    options: {
+      left: 'left',
+      center: 'center',
+      right: 'right'
+    }
+  },
+  verticalAlign: {
+    options: {
+      top: 'top',
+      middle: 'middle',
+      bottom: 'bottom'
+    }
+  },
+  position: {
+    options: posList.reduce(function (map, pos) {
+      map[pos] = pos;
+      return map;
+    }, {})
+  },
+  distance: {
+    min: 0,
+    max: 100
+  }
+};
+app.config = {
+  rotate: 0,
+  align: 'middle',
+  verticalAlign: 'middle',
+  position: 'insideBottom',
+  distance: 15,
+  onChange: function () {
+    const labelOption = {
+      rotate: app.config.rotate,
+      align: app.config.align,
+      verticalAlign: app.config.verticalAlign,
+      position: app.config.position,
+      distance: app.config.distance
+    };
+    myChart.setOption({
+      series: [
+        {
+          label: labelOption
+        },
+        {
+          label: labelOption
+        },
+        {
+          label: labelOption
+        },
+        {
+          label: labelOption
+        }
+      ]
+    });
+  }
+};
+const labelOption = {
+  show: true,
+  position: app.config.position,
+  distance: app.config.distance,
+  align: app.config.align,
+  verticalAlign: app.config.verticalAlign,
+  rotate: app.config.rotate,
+  formatter: '{c}  {name|{a}}',
+  fontSize: 16,
+  rich: {
+    name: {}
+  }
+};
+option = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+    title: {
+            text: '态势识别图'
+        },
+  legend: {
+    data: [ '识别', '实际']
+  },
+  toolbox: {
+    show: true,
+    orient: 'vertical',
+    left: 'right',
+    top: 'center',
+    feature: {
+      mark: { show: true },
+      dataView: { show: true, readOnly: false },
+      magicType: { show: true, type: ['line', 'bar', 'stack'] },
+      restore: { show: true },
+      saveAsImage: { show: true }
+    }
+  },
+  xAxis: [
+    {
+      type: 'category',
+      axisTick: { show: false },
+      data: frame_list,
+        name:'帧数'
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value',
+        name: '识别|实际',
+    }
+  ],
+  series: [
+    {
+      name: '识别',
+      type: 'bar',
+      label: labelOption,
+      emphasis: {
+        focus: 'series'
+      },
+      data: new_reg_list[start_frame/5]
+    },
+    {
+      name: '实际',
+      type: 'bar',
+      label: labelOption,
+      emphasis: {
+        focus: 'series'
+      },
+      data: new_actual_list[start_frame/5]
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+
+            })})
+
+</script>
+
+<script type="text/javascript">
+<!--loss曲线图-->
+    var chartDom = document.getElementById('main2');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  title: {
+    text: 'loss曲线'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: ['train_loss', 'valid_loss']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: {{ x2 | safe }},
+      name:'epoch'
+  },
+  yAxis: {
+    type: 'value',
+        name: 'loss',
+  },
+  series: [
+    {
+      name: 'train_loss',
+      type: 'line',
+      {#stack: 'Total',#}
+      data: {{ y3 | safe }}
+    },
+    {
+      name: 'valid_loss',
+      type: 'line',
+      {#stack: 'Total',#}
+      data: {{ y4 | safe }}
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+  <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <style>
+    .navbar {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+<br>
+<div class="layui-fluid " >
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card" style="width: 50%;">
+                <div class="layui-card-body" >
+                    <form class="layui-form" action="/{{ page }}/{{ stage }}/{{ eval }}/{{ slug }}/{{ nid }}/index_mark_edit/" method="post" id="myForm">
+                        {% csrf_token %}
+                        <div class="layui-form-item" style="display: none">
+                            <label class="layui-form-label">page</label>
+                            <div class="layui-input-block">
+                                      <input type="radio" name="page" value="{{ page }}" title="{{ page }}" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">阶段</label>
+                            <div class="layui-input-block">
+                                  {% if stage == "A" %}
+                                      <input type="radio" name="stage" value="A" title="A" checked>
+                                  {% else %}
+                                      <input type="radio" name="stage" value="A" title="A">
+                                  {% endif %}
+                                {% if stage == "B" %}
+                                      <input type="radio" name="stage" value="B" title="B" checked>
+                                  {% else %}
+                                      <input type="radio" name="stage" value="B" title="B">
+                                  {% endif %}
+                                {% if stage == "C" %}
+                                      <input type="radio" name="stage" value="C" title="C" checked>
+                                  {% else %}
+                                      <input type="radio" name="stage" value="C" title="C">
+                                  {% endif %}
+                                {% if stage == "D" %}
+                                      <input type="radio" name="stage" value="D" title="D" checked>
+                                  {% else %}
+                                      <input type="radio" name="stage" value="D" title="D">
+                                  {% endif %}
+                            </div>
+                          </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">评价</label>
+                            <div class="layui-input-block">
+                                  {% if eval == "1" %}
+                                      <input type="radio" name="eval" value="1" title="1" checked>
+                                  {% else %}
+                                      <input type="radio" name="eval" value="1" title="1">
+                                  {% endif %}
+                                {% if eval == "2" %}
+                                      <input type="radio" name="eval" value="2" title="2" checked>
+                                  {% else %}
+                                      <input type="radio" name="eval" value="2" title="2">
+                                  {% endif %}
+                                {% if eval == "3" %}
+                                      <input type="radio" name="eval" value="3" title="3" checked>
+                                  {% else %}
+                                      <input type="radio" name="eval" value="3" title="3">
+                                  {% endif %}
+                                {% if eval == "4" %}
+                                      <input type="radio" name="eval" value="4" title="4" checked>
+                                  {% else %}
+                                      <input type="radio" name="eval" value="4" title="4">
+                                  {% endif %}
+                            </div>
+                          </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                              <button class="layui-btn" lay-submit lay-filter="formDemo">更新</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //各种基于事件的操作，下面会有进一步介绍
+        });
+
+        function show(str){
+                document.getElementById("myForm").action="/plane_search2/?page="+str
+	            document.getElementById("myForm").submit();
+        }
+</script>
+</body>
+
+</html>

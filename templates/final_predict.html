@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="chart_part" style="width:100%; height:710px" ></div>
+</body>
+<script>
+
+import * as echarts from 'echarts';
+
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+
+// prettier-ignore
+const hours = [
+    '1a', '2a', '3a', '4a', '5a', '6a',
+];
+// prettier-ignore
+const days = [
+    '1a', '2a', '3a', '4a', '5a', '6a',
+];
+// prettier-ignore
+const data = [[0, 0, 5], [0, 1, 1],[0, 5, 1]]
+option = {
+  tooltip: {
+    position: 'top'
+  },
+  grid: [
+    {
+      top: '50%',
+      right: '50%'
+    },
+    {
+      bottom: '52%',
+      right: '50%'
+    },
+    {
+      top: '50%',
+      left: '52%'
+    }
+  ],
+  xAxis: [
+    {
+      type: 'category',
+      data: hours,
+      splitArea: {
+        show: true
+      },
+      gridIndex: 0
+    },
+    {
+      type: 'category',
+      data: hours,
+      axisTick: { show: false },
+      axisLabel: { show: false },
+      axisLine: { show: false },
+      splitArea: {
+        show: true
+      },
+      gridIndex: 1
+    },
+    {
+      type: 'category',
+      data: hours,
+      splitArea: {
+        show: true
+      },
+      gridIndex: 2
+    }
+  ],
+  yAxis: [
+    {
+      type: 'category',
+      data: days,
+      splitArea: {
+        show: true
+      },
+      gridIndex: 0
+    },
+    {
+      type: 'category',
+      data: days,
+
+      splitArea: {
+        show: true
+      },
+      gridIndex: 1
+    },
+    {
+      type: 'category',
+      data: days,
+      axisTick: { show: false },
+      axisLabel: { show: false },
+      axisLine: { show: false },
+      splitArea: {
+        show: true
+      },
+      gridIndex: 2
+    }
+  ],
+  visualMap: {
+    min: 0,
+    max: 10,
+    calculable: true,
+    orient: 'horizontal',
+    left: 'center',
+    bottom: '0%'
+  },
+  series: [
+    {
+      name: 'Punch Card',
+      type: 'heatmap',
+      data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    },
+    {
+      name: 'Punch Card',
+      type: 'heatmap',
+      data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    },
+    {
+      name: 'Punch Card',
+      type: 'heatmap',
+      data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+
+</script>
+</html>

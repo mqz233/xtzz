@@ -1,0 +1,113 @@
+{% load myapp_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+  <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+  <style>
+    .navbar {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form" action="/index_list/" method="post" id="myForm">
+                        {% csrf_token %}
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">指标</label>
+                            <div class="layui-input-block">
+                                {% for field in names %}
+                                <input type="checkbox" name="check_box_list" title="{{ field.name }}" value="{{ field.name }}" {% if field.name in vals %} checked="checked" {% endif %}>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                  <button class="layui-btn" lay-submit lay-filter="formDemo">确认展示</button>
+            {#                      <button type="reset" class="layui-btn layui-btn-primary">重置</button>#}
+                            </div>
+                        </div>
+                    </form>
+    </div>
+                <div class="layui-card-body ">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                index列表
+                            </div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                {% for obj in vals %}
+                                    <th style={{ width}}>{{ obj }}</th>
+                                {% endfor %}
+                            <th style={{ width}}>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                        {% for obj in queryset %}
+
+{#                            3.自定义模板标签#}
+                            <tr>
+                            {% for item in vals %}
+                                    <td>{{ obj|get_obj_attr:item }}</td>
+                            {% endfor %}
+                                <td>
+                                <a class="btn btn-primary btn-xs" href="/{{ page }}/{{obj.id}}/index_edit/">编辑</a>
+                                <a class="btn btn-danger btn-xs" href="/{{obj.id}}/index_delete/">删除</a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+               </div>
+                <div class="layui-card-body ">
+                    <div class="clearfix">
+                        <ul class="pagination">
+                            {{ page_string }}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-3.6.0.min.js"></script>
+<script>
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //各种基于事件的操作，下面会有进一步介绍
+        });
+        function show(str){
+                document.getElementById("myForm").action="/index_list/?page="+str
+	            document.getElementById("myForm").submit();
+        }
+
+    </script>
+
+</body>
+</body>
+
+</html>

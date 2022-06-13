@@ -1,0 +1,70 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录-X-admin2.2</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <script type="text/javascript" src="../static/js/jquery.min.js"></script>
+    <script src="../static/lib/layui/layui.js" charset="utf-8"></script>
+    <!--[if lt IE 9]>
+            <script src="/static/js/html5shiv.min.js"></script>
+            <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-bg">
+
+<div class="login layui-anim layui-anim-up">
+
+    <div class="message">云协同作战平台登录</div>
+<!--    <div class="message">{{ status }}</div>-->
+    <div id="darkbannerwrap"></div>
+
+<!--    <form method="post" class="layui-form" action="/login/">-->
+<!--        <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">-->
+<!--        <hr class="hr15">-->
+<!--        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">-->
+<!--        <hr class="hr15">-->
+<!--        <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit" datatype="all">-->
+<!--        <hr class="hr20">-->
+<!--    </form>-->
+
+    <form method="post" class="layui-form" novalidate>
+        {% csrf_token %}
+
+        <div class="layui-form-item">
+<!--            <label>用户名</label>-->
+            {{ form.username }}
+            <span style="color: red;">{{ form.username.errors.0 }}</span>
+        </div>
+        <div class="layui-form-item">
+<!--            <label>密码</label>-->
+            {{ form.password }}
+            <span style="color: red;">{{ form.password.errors.0 }}</span>
+        </div>
+        <div class="layui-form-item">
+            <label for="id_code"></label>
+            <div class="row">
+                <div class="col-xs-7">
+                    {{ form.code }}
+                    <span style="color: red;">{{ form.code.errors.0 }}</span>
+                </div>
+                <br>
+                <div class="col-xs-5">
+                    <img id="image_code" src="/code/">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="layui-btn">登 录</button>
+    </form>
+</div>
+
+
+</body>
+</html>

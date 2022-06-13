@@ -1,0 +1,189 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+<head class="x-admin-sm">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/lib/layui/css/layui.css">
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+
+    <title>云协同作战系统</title>
+</head>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    {#                    {% load django_tables2 %}#}
+                    {#                    {% render_table table %}#}
+                    <div class="layui-collapse">
+                        <div class="layui-colla-item">
+                            <div class="layui-colla-title" style="background-color: #e2e2e2;  font-weight: bold">压缩包导入
+                            </div>
+                            <div class="layui-colla-content layui-show">
+                                {#                    <a type="button" class="btn btn-info btn-sm" id="system_upload_state" value="system_upload_state" href="/system_upload">查询外部数据导入模块状态</a>#}
+                                {#                    <br><br>#}
+
+                                <form enctype="multipart/form-data" action="/upload_zip/" method="post">
+                                    <div class="input-group mb-3" style="width: 70%">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">输入tag</span>
+                                        <input type="text" class="form-control" aria-label="Sizing example input"
+                                               aria-describedby="inputGroup-sizing-default" name="zip_tag"
+                                               id="zip_tag">
+                                        <input class="form-control" type="file" name="file"
+                                               aria-describedby="uploadbutton">
+
+                                        <input class="btn btn-primary" type="submit" value="上传压缩包" id="uploadbutton3"/>
+
+                                    </div>
+                                </form>
+{#                                {% if messages %}#}
+{#                                    <script>#}
+{#                                        {% for msg in messages %}#}
+{#                                            alert('{{ msg.message }}');#}
+{#                                        {% endfor %}#}
+{#                                    </script>#}
+{#                                {% endif %}#}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script>
+    if ('{{ context }}') {
+        console.log('{{ context }}')
+        alert('{{ context }}')
+    }
+</script>
+{#<script>#}
+{#    $(function () {#}
+{#    $("#uploadbutton3").click(function () {#}
+{#        document.getElementById('uploadbutton3').className='btn btn-secondary';#}
+{#        document.getElementById('uploadbutton3').value='上传中';#}
+{#        document.getElementById('uploadbutton3').disabled = true;#}
+{#    });#}
+{#});#}
+{#</script>#}
+
+<script>layui.use('laydate',
+    function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+    });</script>
+<script>
+    layui.use('table',
+    function () {
+        var table = layui.table;
+
+        //监听单元格编辑
+        table.on('edit(test)',
+            function (obj) {
+                var value = obj.value //得到修改后的值
+                    ,
+                    data = obj.data //得到所在行所有键值
+                    ,
+                    field = obj.field; //得到字段
+                layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+            });
+
+        //头工具栏事件
+        table.on('toolbar(test)',
+            function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'getCheckData':
+                        var data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                        break;
+                    case 'getCheckLength':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                        break;
+                }
+                ;
+            });
+    });
+
+$('#system_upload_start').click(function () {
+    $.ajax({
+        url: /system_upload/,
+        method: 'POST', // or another (GET), whatever you need
+        data: {
+            name: value, // data you need to pass to your function
+            click: true
+        },
+        success: function (data) {
+            // success callback
+            // you can process data returned by function from views.py
+        }
+    });
+});
+
+$('#system_upload_end').click(function () {
+    $.ajax({
+        url: /system_upload/,
+        method: 'POST', // or another (GET), whatever you need
+        data: {
+            name: value, // data you need to pass to your function
+            click: true
+        },
+        success: function (data) {
+            // success callback
+            // you can process data returned by function from views.py
+        }
+    });
+});
+
+
+</script>
+<script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/static/lib/layui/layui.all.js" charset="utf-8"></script>
+<script src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script>
+
+    layui.use(['element', 'layer'], function () {
+        var element = layui.element();
+        var layer = layui.layer;
+
+//监听折叠
+        element.on('collapse(test)', function (data) {
+            layer.msg('展开状态：' + data.show);
+        });
+    });
+</script>
+
+</html>

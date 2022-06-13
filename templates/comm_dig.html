@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <script src="/static/js/echarts.min.js"></script>
+        <link rel="stylesheet" href="/static/css/charts.css">
+        <link rel="stylesheet" href="/static/css/font.css">
+        <link rel="stylesheet" href="/static/css/xadmin.css">
+        <link rel="stylesheet" href="/static/css/theme5.css">
+        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/js/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/xadmin.js"></script>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <script src="/static/js/bootstrap.min.js"></script>
+
+    </head>
+</head>
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="input-group mb-3" style="width: 60%">
+                        <label class="input-group-text" for="inputGroupSelect01">选择tag</label>
+                        <select class="form-select" name="tag_name" form="choose" id="war_name">
+                            {% if tag_name %}
+                                <option >...</option>
+                            {% else %}
+                                <option selected>...</option>
+                            {% endif %}
+                            {% for key in tag_list %}
+                                {% if tag_name == key %}
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelect01">选择属性</label>
+                        <select class="form-select" name="x_aris" form="choose" id="x_aris">
+                            {% if choice %}
+                            <option id="fault_choice">...</option>
+                            {% else %}
+                            <option selected id="fault_choice">...</option>
+                            {% endif %}
+                            {% if choice == 1 %}
+                            <option selected id="1" value="一类数据挖掘分析">对抗数据挖掘分析</option>
+                             {% else %}
+                            <option  id="1" value="一类数据挖掘分析">对抗数据挖掘分析</option>
+                            {% endif %}
+                            {% if choice == 2 %}
+                            <option selected id="2" value="二类数据挖掘分析">攻击数据挖掘分析</option>
+                             {% else %}
+                            <option id="2" value="二类数据挖掘分析">攻击数据挖掘分析</option>
+                            {% endif %}
+                            {% if choice == 3 %}
+                            <option selected id="3" value="三类数据挖掘分析">探测数据挖掘分析</option>
+                             {% else %}
+                            <option id="3" value="三类数据挖掘分析">探测数据挖掘分析</option>
+                            {% endif %}
+
+                        </select>
+                        <form action="/comm_dig/" method="post" id="choose">
+                            <button class="btn btn-primary">&nbsp;生&nbsp;&nbsp;&nbsp;成&nbsp;</button>
+                        </form>
+
+                    </div>
+
+
+                    <div class="layui-card-body " id="comm1" style="display: none">
+
+                        <img src="../static/image/dk_community.png">
+                    </div>
+                    <div class="layui-card-body " id="comm2" style="display: none">
+                        <img src="../static/image/gj_community.png">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    if ('{{ choice }}' == '1') {
+        document.getElementById('comm1').style.display = 'block'
+    } else if ('{{ choice }}' == '2') {
+        document.getElementById('comm2').style.display = 'block'
+    } else if ('{{ choice }}' == '3'){
+        document.getElementById('comm2').style.display = 'block'
+    } else {
+
+    }
+</script>

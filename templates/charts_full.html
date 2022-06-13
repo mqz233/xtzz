@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                <div class="input-group mb-3" style="width: 100%">
+                        <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select"  form="choose" name="x_1" id="x_1">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                        {#                        &nbsp;#}
+                        <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select"  form="choose" name="x_2" id="x_2">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                    <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select"  form="choose" name="x_3" id="x_3">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                    <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select"  form="choose" name="x_4" id="x_4">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                    <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select"  form="choose" name="x_5" id="x_5">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                    <label class="input-group-text" for="inputGroupSelect01">选择标签</label>
+                        <select class="form-select" form="choose" name="x_6" id="x_6">
+                            <option selected>...</option>
+                            <option value="1">飞行速度</option>
+                            <option value="2">机动过载</option>
+                            <option value="3">处理时延</option>
+                            <option value="4">探测节点时延</option>
+                            <option value="5">雷达最大探测角度</option>
+                            <option value="6">导弹最大发射角度</option>
+                            <option value="7">导弹最远攻击距离</option>
+                            <option value="8">导弹不可逃逸最大距离</option>
+                            <option value="9">导弹不可逃逸最小距离</option>
+                        </select>
+                        {#                        &nbsp;&nbsp;&nbsp;#}
+                        <form action="/analyse/" method="post" id="choose">
+                            <button class="btn btn-primary" >&nbsp;分&nbsp;&nbsp;&nbsp;析&nbsp;</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="layui-card-body ">
+    <div id="charts" style="width:100%; height:710px"></div>
+                    </div>
+    </div>
+    </div>
+    </div>
+</div>
+</body>
+<script>
+
+
+var chartDom = document.getElementById('charts');
+var myChart = echarts.init(chartDom);
+var option;
+
+// prettier-ignore
+const hours = [
+    '', '', '', '', '', '',
+];
+// prettier-ignore
+const days = [
+    ' ', ' ', ' ', ' ', ' ', ' ',
+];
+// prettier-ignore
+const data = [
+        {value:[0, 0, 5], name:"x,y"},
+        {value:[0, 1, 2], name:"x,y"},
+        {value:[1, 1, 1], name:"x,y"},
+        {value:[1, 2, 3], name:"x,y"},
+        {value:[1, 3, 7], name:"x,y"},
+        {value:[2, 1, 6], name:"x,y"},
+        {value:[3, 4, 5], name:"x,y"},
+        {value:[2, 4, 3], name:"x,y"},
+        {value:[5, 2, 5], name:"x,y"},
+        {value:[4, 1, 7], name:"x,y"},
+        {value:[5, 4, 9], name:"x,y"},
+        {#[0, 0, 5]#}
+    ];
+const data2 = [
+        {value:[0, 0, 7], name:"x,y"},
+        {value:[0, 1, 3], name:"x,y"},
+        {value:[1, 4, 2], name:"x,y"},
+        {value:[1, 2, 3], name:"x,y"},
+        {value:[1, 6, 7], name:"x,y"},
+        {value:[2, 1, 5], name:"x,y"},
+        {value:[3, 3, 5], name:"x,y"},
+        {value:[2, 4, 3], name:"x,y"},
+        {value:[5, 6, 5], name:"x,y"},
+        {value:[4, 1, 7], name:"x,y"},
+        {value:[5, 3, 9], name:"x,y"},
+        {#[0, 0, 5]#}
+    ];
+const data3 = [
+        {value:[0, 0, 2], name:"x,y"},
+        {value:[0, 2, 3], name:"x,y"},
+        {value:[1, 3, 7], name:"x,y"},
+        {value:[1, 5, 3], name:"x,y"},
+        {value:[1, 2, 7], name:"x,y"},
+        {value:[2, 1, 5], name:"x,y"},
+        {value:[3, 3, 5], name:"x,y"},
+        {value:[2, 2, 3], name:"x,y"},
+        {value:[5, 4, 5], name:"x,y"},
+        {value:[4, 1, 7], name:"x,y"},
+        {value:[5, 1, 2], name:"x,y"},
+        {#[0, 0, 5]#}
+    ];
+
+{#数据传入前段接口#}
+{#const data = {{ p_data }}#}
+option = {
+
+  tooltip: {
+    position: 'top'
+  },
+   grid: [
+    {
+      top: '0%',
+        bottom: '85%',
+      left: '5%',
+        right: '80%'
+    },
+    {
+     top: '15%',
+        bottom: '70%',
+      left: '5%',
+        right: '80%'
+    },
+    {
+      top: '15%',
+        bottom: '70%',
+      left: '20%',
+        right: '65%'
+    },
+    {
+      top: '30%',
+        bottom: '55%',
+      left: '5%',
+        right: '80%'
+    },
+    {
+       top: '30%',
+        bottom: '55%',
+        left: '20%',
+        right: '65%'
+    },
+    {
+       top: '30%',
+        bottom: '55%',
+      left: '35%',
+        right: '50%'
+    },
+    {
+       top: '45%',
+        bottom: '40%',
+      left: '5%',
+        right: '80%'
+    },
+    {
+      top: '45%',
+        bottom: '40%',
+      left: '20%',
+        right: '65%'
+    },
+    {
+      top: '45%',
+        bottom: '40%',
+      left: '35%',
+        right: '50%'
+    },
+    {
+     top: '45%',
+        bottom: '40%',
+      left: '50%',
+        right: '35%'
+    },
+    {
+      top: '60%',
+        bottom: '25%',
+      left: '5%',
+        right: '80%'
+    },
+    {
+      top: '60%',
+        bottom: '25%',
+      left: '20%',
+        right: '65%'
+    },
+    {
+      top: '60%',
+        bottom: '25%',
+      left: '35%',
+        right: '50%'
+    },
+    {
+      top: '60%',
+        bottom: '25%',
+      left: '50%',
+        right: '35%'
+    },
+    {
+      top: '60%',
+        bottom: '25%',
+      left: '65%',
+        right: '20%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '5%',
+        right: '80%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '20%',
+        right: '65%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '35%',
+        right: '50%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '50%',
+        right: '35%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '65%',
+        right: '20%'
+    },
+       {
+      top: '75%',
+        bottom: '10%',
+      left: '80%',
+        right: '5%'
+    },
+  ],
+  xAxis: [{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 0
+  },
+  {
+    type: 'category',
+    data: hours,
+
+    {#axisTick: { show: false },#}
+    {#  axisLabel: { show: false },#}
+    {#  axisLine: { show: false },#}
+    splitArea: {
+      show: true
+    },
+    gridIndex: 1
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 2
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 3
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 4
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 5
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 6
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 7
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 8
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 9
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 10
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 11
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 12
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 13
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 14
+    },
+      {
+    type: 'category',
+    data: hours,
+    name: "{{ x_1 | safe}}",
+    {#name: '最大探测角度',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 15
+    },{
+    type: 'category',
+    data: hours,
+          name: "{{ x_2 | safe}}",
+    {#name:'最大探测距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 16
+    },{
+    type: 'category',
+    data: hours,
+          name: "{{ x_3 | safe}}",
+    {#name: '最大发射角度',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 17
+    },{
+    type: 'category',
+    data: hours,
+          name: "{{ x_4 | safe}}",
+    {#name: '最大攻击距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 18
+    },{
+    type: 'category',
+    data: hours,
+          name: "{{ x_5 | safe}}",
+    {#name: '不可逃逸最大距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 19
+    },{
+    type: 'category',
+    data: hours,
+          name: "{{ x_6 | safe}}",
+    {#name: '不可逃逸最小距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 20
+    },
+  ],
+  yAxis: [{
+    type: 'category',
+    data: days,
+      name: "{{ x_1 | safe}}",
+      {#name: '最大探测角度',#}
+      nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 0
+  },
+  {
+    type: 'category',
+    data: days,
+      name: "{{ x_2 | safe}}",
+    {#name: '最大探测距离',#}
+      nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 1
+  },
+  {
+    type: 'category',
+    data: days,
+    {#axisTick: { show: false },#}
+    {#  axisLabel: { show: false },#}
+    {#  axisLine: { show: false },#}
+    splitArea: {
+      show: true
+    },
+    gridIndex: 2
+  },
+    {
+    type: 'category',
+    data: hours,
+        name: "{{ x_3 | safe}}",
+    {#name: '最大发射角度',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 3
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 4
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 5
+    },
+    {
+    type: 'category',
+    data: hours,
+        name: "{{ x_4 | safe}}",
+    {#name: '最大发射角度',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 6
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 7
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 8
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 9
+    },
+    {
+    type: 'category',
+    data: hours,
+        name: "{{ x_5 | safe}}",
+    {#name: '不可逃逸最大距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 10
+    },
+    {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 11
+    },
+      {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 12
+    },
+      {
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 13
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 14
+    },
+      {
+    type: 'category',
+    data: hours,
+          name: "{{ x_6 | safe}}",
+    {#name:'不可逃逸最小距离',#}
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 15
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 16
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 17
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 18
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 19
+    },{
+    type: 'category',
+    data: hours,
+
+    nameLocation: 'center',
+    splitArea: {
+      show: true
+    },
+    gridIndex: 20
+    },
+  ],
+  visualMap: {
+    min: 0,
+    max: 10,
+    calculable: true,
+    orient: 'horizontal',
+    left: 'center',
+    bottom: '0%'
+  },
+  series: [
+    {
+      name: 'Punch Card',
+      type: 'heatmap',
+
+      label: {
+        show: true,
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      encode: { tooltip: [0, 1] },
+      {#datasetIndex: 0#}
+    },
+    {
+      name: 'Punch Card1',
+      type: 'heatmap',
+        data: data3,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      encode: { tooltip: [0, 1] },
+
+    },
+    {
+      name: 'Punch Card2',
+      type: 'heatmap',
+
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 2,
+      yAxisIndex: 2,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+    {
+      name: 'Punch Card3',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 3,
+      yAxisIndex: 3,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card4',
+      type: 'heatmap',
+        data: data2,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 4,
+      yAxisIndex: 4,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card5',
+      type: 'heatmap',
+
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 5,
+      yAxisIndex: 5,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card6',
+      type: 'heatmap',
+        data: data2,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 6,
+      yAxisIndex: 6,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card7',
+      type: 'heatmap',
+        data: data3,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 7,
+      yAxisIndex: 7,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card8',
+      type: 'heatmap',
+        data: data2,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 8,
+      yAxisIndex: 8,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card9',
+      type: 'heatmap',
+
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 9,
+      yAxisIndex: 9,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card10',
+      type: 'heatmap',
+        data: data3,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 10,
+      yAxisIndex: 10,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card11',
+      type: 'heatmap',
+        data: data2,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 11,
+      yAxisIndex: 11,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card12',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 12,
+      yAxisIndex: 12,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card13',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 13,
+      yAxisIndex: 13,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card14',
+      type: 'heatmap',
+
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 14,
+      yAxisIndex: 14,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+      {
+      name: 'Punch Card15',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 15,
+      yAxisIndex: 15,
+      encode: { tooltip: [0, 1] },
+
+
+    },{
+      name: 'Punch Card16',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 16,
+      yAxisIndex: 16,
+      encode: { tooltip: [0, 1] },
+
+
+    },{
+      name: 'Punch Card17',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 17,
+      yAxisIndex: 17,
+      encode: { tooltip: [0, 1] },
+
+
+    },{
+      name: 'Punch Card18',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 18,
+      yAxisIndex: 18,
+      encode: { tooltip: [0, 1] },
+
+
+    },{
+      name: 'Punch Card19',
+      type: 'heatmap',
+        data: data,
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 19,
+      yAxisIndex: 19,
+      encode: { tooltip: [0, 1] },
+
+
+    },{
+      name: 'Punch Card20',
+      type: 'heatmap',
+
+      label: {
+        show: true
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      xAxisIndex: 20,
+      yAxisIndex: 20,
+      encode: { tooltip: [0, 1] },
+
+
+    },
+  ]
+};
+    //热力图点击事件
+			myChart.off('click');
+			myChart.on('click', function(param) {
+				var name = param.name;
+                var s_index = param.seriesIndex
+                console.log('测试');
+                console.log(s_index);
+                console.log(param);
+                {#小图信息#}
+                {#var x_name = {{ x_name | safe}}#}
+                {#var y_name = {{ y_name | safe}}#}
+                {#var x_data = {{ x_data | safe}}#}
+                {#var y_data = {{ y_data | safe}}#}
+                {#var full_data = {{ full_data | safe}}#}
+
+                var full_data = option.series[s_index].data
+                var x_index = option.series[s_index].xAxisIndex
+                var y_index = option.series[s_index].yAxisIndex
+                console.log(full_data);
+                console.log(x_index,y_index);
+                var x2_index = -1;
+                var y2_index = -1;
+                switch (x_index) {
+                    case 0:case 1:case 3:case 6:case 10:case 15: x2_index = 15;
+                    break;
+                    case 2:case 4:case 7:case 11:case 16: x2_index = 16;
+                    break;
+                    case 5:case 8:case 12:case 17: x2_index = 17;
+                    break;
+                    case 9:case 13:case 18: x2_index = 18;
+                    break;
+                    case 14:case 19: x2_index =19;
+                    break;
+                    case 20: x2_index = 20;
+                    break;
+                }
+                switch (y_index) {
+                    case 0: y2_index = 0;
+                    break;
+                    case 1:case 2: y2_index = 1;
+                    break;
+                    case 3:case 4:case 5: y2_index =3;
+                    break;
+                    case 6:case 7:case 8:case 9: y2_index = 6;
+                    break;
+                    case 10:case 11:case 12:case 13:case 14: y2_index =10;
+                    break;
+                    case 15:case 16:case 17:case 18:case 19:case 20: y2_index = 15;
+                    break;
+                }
+                console.log(x2_index,y2_index);
+                var x_name = option.xAxis[x2_index].name;
+                var y_name = option.yAxis[y2_index].name;
+                var x_data = option.xAxis[x_index].data;
+                var y_data = option.xAxis[y_index].data;
+                let full2_data = JSON.stringify(full_data);
+                let x2_data = JSON.stringify(x_data);
+                let y2_data = JSON.stringify(y_data);
+                console.log(x_name,y_name, x_data, y_data);
+                console.log(x2_data, y2_data);
+                console.log(full2_data);
+                if(name == "x,y"){
+                    var storage = window.sessionStorage;
+
+                    storage['x_name'] = x_name;
+                    storage['y_name'] = y_name;
+                    storage['x_data'] = x2_data;
+                    storage['y_data'] = y2_data;
+                    storage['full_data'] = full2_data;
+
+                    window.location.href="/chart_part";
+                    {#window.location.href="/chart_part/?data="+data;#}
+                }
+            }
+
+			);
+
+option && myChart.setOption(option);
+
+</script>
+</html>

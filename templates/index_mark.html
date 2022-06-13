@@ -1,0 +1,129 @@
+{% load myapp_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+  <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <style>
+    .navbar {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form" action="/index_mark/" method="post" id="myForm">
+                        {% csrf_token %}
+                        <div class="layui-form-item" style="width: 50%">
+                            <label class="layui-form-label">表名</label>
+                            <div class="layui-input-block">
+                              <select name="tagid" lay-verify="required" id="tagid">
+                                  {% if sel_tagid %}
+                                  <option >...</option>
+                                  {% else %}
+                                  <option selected>...</option>
+                                  {% endif %}
+
+                                  {% for key in tagid %}
+                                  {% if key == sel_tagid %}　　
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                                  {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                    <div class="layui-input-block">
+                      <button class="layui-btn" lay-submit lay-filter="formDemo">查询</button>
+                    </div>
+                  </div>
+                    </form>
+                </div>
+            {% if sel_tagid %}
+                <div class="layui-card-body ">
+                    <div class="panel panel-default" style="overflow:scroll;">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                指标列表
+                            </div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                {% for obj in vals1 %}
+                                    <th style={{ width}}>{{ obj }}</th>
+                                {% endfor %}
+                                <th style={{ width}}>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                        {% for obj in queryset %}
+
+{#                            3.自定义模板标签#}
+                            <tr>
+                                {% for item in vals1 %}
+                                    <td>{{ obj|get_dict_attr2:item }}</td>
+                                {% endfor %}
+                                <td>
+                                <a class="btn btn-primary btn-xs" href="/{% if page  %}{{ page }}{% else %}1{% endif %}/{% if obj.stage  %}{{ obj.stage }}{% else %}A{% endif %}/{% if obj.eval  %}{{ obj.eval }}{% else %}1{% endif %}/{{ sel_tagid }}/{{obj.frameId}}/index_mark_edit/">编辑</a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+               </div>
+                <div class="layui-card-body ">
+                    <div class="clearfix">
+                        <ul class="pagination">
+                            {{ page_string }}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //各种基于事件的操作，下面会有进一步介绍
+        });
+
+        function show(str){
+                document.getElementById("myForm").action="/index_mark/?page="+str
+	            document.getElementById("myForm").submit();
+        }
+
+    </script>
+
+</body>
+</body>
+
+</html>

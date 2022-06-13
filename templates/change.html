@@ -1,0 +1,52 @@
+<!-- 所有的添加页面都一样，反复写太麻烦没意义，写一个公共的 -->
+<!-- 已经应用的视图函数有：pretty_add、pretty_edit、admin_add -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+  <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+  <style>
+    .navbar {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"> {{title}}</h3>
+        </div>
+        <div class="panel-body">
+            <form method="post" novalidate> <!--取消浏览器的校验，用自己写的-->
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label >{{field.label}}</label>
+                        {{field}}
+                        <span style="color: red;">{{field.errors.0}}</span>
+
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">提 交</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+  </div>
+
+<script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>
+
+

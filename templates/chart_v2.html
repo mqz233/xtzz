@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    {#                <a type="button" class="btn btn-primary"  href="/analyse/">v1</a>#}
+                    <div class="input-group mb-3" style="width: 60%">
+
+                        <label class="input-group-text" for="inputGroupSelect01">选择tag</label>
+                        <select class="form-select" name="tag_name" form="choose" id="war_name">
+                            {% if tag_name %}
+                                <option >...</option>
+                            {% else %}
+                                <option selected>...</option>
+                            {% endif %}
+                            {% for key in tag_list %}
+                                {% if tag_name == key %}
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        <label class="input-group-text" for="inputGroupSelect01">选择属性</label>
+                        <select class="form-select" name="x_aris" form="choose" id="x_aris">
+                            <option selected id="fault_choice">...</option>
+                            <option id="1" value="1">无人制空（雷达）-最大截获距离</option>
+                            <option id="2" value="2">无人制空（雷达）-最大截获角度</option>
+                            <option id="3" value="3">无人制空- 导弹数量</option>
+                            <option id="4" value="4">无人制空 - 最大攻击距离</option>
+                            <option id="5" value="5">光电探测僚机 - 最大截获角度</option>
+                            <option id="6" value="6">光电探测僚机 - 最大截获距离</option>
+{#                            <option id="7" value="7">灵巧对抗-距离精度</option>#}
+{#                            <option id="8" value="8">灵巧对抗-角度精度</option>#}
+{#                            <option id="9" value="9">预警单元-探测距离</option>#}
+{#                            <option id="10" value="10">预警单元-探测角度</option>#}
+{#                            <option id="11" value="11">预警单元-距离精度</option>#}
+{#                            <option id="12" value="12">预警单元-角度精度</option>#}
+
+                        </select>
+
+
+                        <form action="/chart_v2/" method="post" id="choose">
+                            <button class="btn btn-primary">&nbsp;生&nbsp;&nbsp;&nbsp;成&nbsp;</button>
+                        </form>
+
+                    </div>
+                    <div id="chart_v2" style="width:100%; height:710px" class="layui-card-body"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var chartDom = document.getElementById('chart_v2');
+    var myChart = echarts.init(chartDom);
+    var option;
+    var x =
+    {{ x | safe }}
+    var y1 =
+    {{ y1 | safe }}
+    var y2 =
+    {{ y2 | safe }}
+    var y3 =
+    {{ y3 | safe }}
+
+    var y5 =
+    {{ y5 | safe }}
+    var y6 =
+    {{ y6 | safe }}
+    var y7 =
+    {{ y7 | safe }}
+
+    var y9 =
+    {{ y9 | safe }}
+
+    switch ({{x_name}}) {
+        {#case 12:#}
+        {#    x2_name = "预警单元-角度精度";#}
+        {#    break;#}
+        case 1:
+            x2_name = "无人制空（雷达）-最大截获距离";
+            break;
+        case 2:
+            x2_name = "无人制空（雷达）-最大截获角度";
+            break;
+        case 3:
+            x2_name = "无人制空- 导弹数量";
+            break;
+        case 4:
+            x2_name = "无人制空 - 最大攻击距离";
+            break;
+        case 5:
+            x2_name = "光电探测僚机 - 最大截获角度";
+            break;
+        case 6:
+            x2_name = "光电探测僚机 - 最大截获距离";
+            break;
+        {#case 7:#}
+        {#    x2_name = "灵巧对抗-距离精度";#}
+        {#    break;#}
+        {#case 8:#}
+        {#    x2_name = "灵巧对抗-角度精度";#}
+        {#    break;#}
+        {#case 9:#}
+        {#    x2_name = "预警单元-探测距离";#}
+        {#    break;#}
+        {#case 10:#}
+        {#    x2_name = "预警单元-距离精度";#}
+        {#    break;#}
+        {#case 11:#}
+        {#    x2_name = "预警单元-角度精度";#}
+        {#    break;#}
+    }
+    document.getElementById('fault_choice').innerText = x2_name
+    document.getElementById('fault_choice').value = {{x_name}}
+        document.getElementById('{{x_name}}').style.display = "none"
+    {#     '有人机', '攻击僚机（雷）', '诱饵僚机（光）', '诱饵僚机（电）', #}
+    {#    'F35-C','E2D','预警机','攻击僚机（电）','EA18G' #}
+    option = {
+        backgroundColor:	'#ECF5FF',
+        title: {
+            text: '指标与能效关系分析'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['有人机', '攻击僚机', '诱饵僚机', 'F35-C', 'E2D', '预警机', 'EA18G']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: x,
+            name: x2_name,
+            nameLocation: 'center',
+        },
+        yAxis: {
+            type: 'value',
+            name: '最终存活平台数',
+            nameLocation: 'center',
+        },
+        series: [
+            {
+                name: '有人机',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y1,
+                smooth: true,
+                symbol:'triangle',
+                symbolSize:12,
+
+                lineStyle: { normal:{
+                width: 6}
+                }
+
+            },
+            {
+                name: '攻击僚机',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y2,
+                smooth: true,
+                symbolSize:20,
+                symbol:'triangle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {#{#}
+            {#  name: 'Video Ads',#}
+            {#  type: 'line',#}
+            {#  stack: 'Total',#}
+            {#  data: [150, 232, 201, 154, 190, 330, 410],#}
+            {#  smooth: true#}
+            {##}
+            {
+                name: '诱饵僚机',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y3,
+                smooth: true,
+                symbolSize:20,
+                symbol:'triangle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {#{#}
+            {#  name: '诱饵僚机（电）',#}
+            {#  type: 'line',#}
+            {#  stack: 'Total',#}
+            {#  data: y4,#}
+            {#  smooth: true#}
+            {##}
+            {
+                name: 'F35-C',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y5,
+                smooth: true,
+                symbolSize:20,
+                symbol:'circle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: 'E2D',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y6,
+                smooth: true,
+                symbolSize:20,
+                symbol:'circle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {
+                name: '预警机',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y7,
+                smooth: true,
+                symbolSize:20,
+                symbol:'triangle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            },
+            {#{#}
+            {#  name: '攻击僚机（电）',#}
+            {#  type: 'line',#}
+            {#  stack: 'Total',#}
+            {#  data: y8,#}
+            {#  smooth: true#}
+            {##}
+            {
+                name: 'EA18G',
+                type: 'line',
+                {#stack: 'Total',#}
+                data: y9,
+                smooth: true,
+                symbolSize:20,
+                symbol:'circle',
+                lineStyle: { normal:{
+                width: 6}
+                }
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+    window.onresize = myChart.resize;
+
+</script>
+</html>
