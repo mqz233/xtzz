@@ -39,7 +39,7 @@ class Warwinner:
         draw = []
         for i in range(total):
             dataset = Createdataset(table[i])
-            xlist, ylist = dataset.createdataset2()
+            a,xlist, ylist = dataset.createdataset2(20)
             isred = dataset.red_blue()
             r = 0
             b = 0

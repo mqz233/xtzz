@@ -4,7 +4,7 @@ import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangoProject.settings")
 django.setup()
-
+from app0 import models
 from app0.models import Static_war_data, Init_1207 ,Last_1207
 from app0.models import Static_platform_data
 from app0.models import InitialFrame, AttackLast, AttackInit,RepressInit,RepressLast
@@ -488,8 +488,8 @@ class mysqlOperator():
         ## filter == where, values == select
         # current_war_name = requiredData[0]['war_name']
         tagid = requiredData
-        Frame = Frame.objects.filter(tagid=tagid).values()
-        Index = Index.objects.filter(tagid=tagid).values()
+        Frame = list(models.Frame.objects.filter(tagid=tagid).values())
+        Index = list(models.Index.objects.filter(tagid=tagid).values())
         return {'Frame':Frame, 'Index':Index}
 
     def FuzzyQueryNewTagStaticData(self, requiredData:str): #模糊查询：把所有tagid中tag是requiredData的全部数据查询出来
@@ -527,6 +527,10 @@ class mysqlOperator():
         for tag_i in tag:
             tag_list.append(tag_i['tagid'])
         return list(set(tag_list))#元素去重
+
+    def querywarname(self,tag):
+        a = list(Frame.objects.filter(tagid=tag).values_list('warname', flat=True))
+        return a
 
 # a = mysqlOperator().queryWarData()
 # mysqlOperator().staticGraph()

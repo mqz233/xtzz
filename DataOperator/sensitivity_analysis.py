@@ -114,17 +114,9 @@ class sensitivity_analysis():
             svv = json.loads(result['svv'])
             # 型号
             type = json.loads(result['type'])
-            # if len(svv) == 0:
-            #     Dynamic('/root/xtzz/PredictionModel/data/new_datas/new_dynamic/' + war_name[-3:]).store_data(
-            #         war_name)
-            #     print("Start Import: ", war_name)
-            #     svv = fluxdbOperator().get_svv(war_name)
-            # svv = svv[-1]['svv'][1:-1].split(',')
-            # svv = self.boolToInt(svv)
+            #红蓝方
+            isred = json.loads(result['isRed'])
 
-            # svv = [1] * 40
-            # ssvv  = sum(svv)
-            # assert len(svv)==40
             ########################### 1212 1209、1210 1207、1208 1206 1204 1211 1205
             count[0].append(0)
             count[1].append(0)
@@ -150,9 +142,105 @@ class sensitivity_analysis():
                     count[6][cnt] += svv[i]
             cnt += 1
 
+        return {'x': self.get_x_label(col_index), 'y': count}
 
-            # count.append(current_count)
-        # count += 1  # 统计结果
+    def get_graph_data_red(self, col_index, tag):
+        graph_index = col_index - 1  # col_index = [1-12]
+
+        # 输入作战场数，获取动态数据表中最后的svv属性
+        client = fluxdbOperator()
+        measurements = client.get_plane_measurements()
+        table = [] # 需要统计的表
+        for m in measurements:
+            if tag in m:
+                table.append(m)
+        ## 循环获取每一场战斗的结果
+        count = [[], [], [], [], [], [], []]  ## 所有飞机、全部作战结果
+        cnt = 0
+        for war in table:
+            result = client.select_num_battle(war)[-1]
+            ## 获取战斗结果
+            svv = json.loads(result['svv'])
+            # 型号
+            type = json.loads(result['type'])
+            #红蓝方
+            isred = json.loads(result['isRed'])
+
+            ########################### 1212 1209、1210 1207、1208 1206 1204 1211 1205
+            count[0].append(0)
+            count[1].append(0)
+            count[2].append(0)
+            count[3].append(0)
+            count[4].append(0)
+            count[5].append(0)
+            count[6].append(0)
+            for i in range(len(svv)):
+                if isred[i] == 1:
+                    if type[i] == 1212:
+                        count[0][cnt] += svv[i]
+                    elif type[i] == 1209 or type[i] == 1210:
+                        count[1][cnt] += svv[i]
+                    elif type[i] == 1207 or type[i] == 1208:
+                        count[2][cnt] += svv[i]
+                    elif type[i] == 1206:
+                        count[3][cnt] += svv[i]
+                    elif type[i] == 1204:
+                        count[4][cnt] += svv[i]
+                    elif type[i] == 1211:
+                        count[5][cnt] += svv[i]
+                    elif type[i] == 1205:
+                        count[6][cnt] += svv[i]
+            cnt += 1
+
+        return {'x': self.get_x_label(col_index), 'y': count}
+
+    def get_graph_data_blue(self, col_index, tag):
+        graph_index = col_index - 1  # col_index = [1-12]
+
+        # 输入作战场数，获取动态数据表中最后的svv属性
+        client = fluxdbOperator()
+        measurements = client.get_plane_measurements()
+        table = [] # 需要统计的表
+        for m in measurements:
+            if tag in m:
+                table.append(m)
+        ## 循环获取每一场战斗的结果
+        count = [[], [], [], [], [], [], []]  ## 所有飞机、全部作战结果
+        cnt = 0
+        for war in table:
+            result = client.select_num_battle(war)[-1]
+            ## 获取战斗结果
+            svv = json.loads(result['svv'])
+            # 型号
+            type = json.loads(result['type'])
+            #红蓝方
+            isred = json.loads(result['isRed'])
+
+            ########################### 1212 1209、1210 1207、1208 1206 1204 1211 1205
+            count[0].append(0)
+            count[1].append(0)
+            count[2].append(0)
+            count[3].append(0)
+            count[4].append(0)
+            count[5].append(0)
+            count[6].append(0)
+            for i in range(len(svv)):
+                if isred[i] != 1:
+                    if type[i] == 1212:
+                        count[0][cnt] += svv[i]
+                    elif type[i] == 1209 or type[i] == 1210:
+                        count[1][cnt] += svv[i]
+                    elif type[i] == 1207 or type[i] == 1208:
+                        count[2][cnt] += svv[i]
+                    elif type[i] == 1206:
+                        count[3][cnt] += svv[i]
+                    elif type[i] == 1204:
+                        count[4][cnt] += svv[i]
+                    elif type[i] == 1211:
+                        count[5][cnt] += svv[i]
+                    elif type[i] == 1205:
+                        count[6][cnt] += svv[i]
+            cnt += 1
 
         return {'x': self.get_x_label(col_index), 'y': count}
 

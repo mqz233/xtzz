@@ -1,0 +1,188 @@
+{% load myapp_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Page Title</title>
+  <link rel="stylesheet" href="/static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/charts.css">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="/static/css/theme5.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script src="/static/plugins/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <style>
+    .navbar {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+<body>
+<div class="layui-fluid ">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form" action="/lstm_train/" method="post">
+                        {% csrf_token %}
+                        <div class="layui-form-item" style="width: 50%">
+                            <label class="layui-form-label">场景</label>
+                            <div class="layui-input-block">
+                              <select name="tagid" lay-verify="required" id="tagid">
+                                  {% if sel_tagid %}
+                                  <option >...</option>
+                                  {% else %}
+                                  <option selected>...</option>
+                                  {% endif %}
+
+                                  {% for key in tagid %}
+                                  {% if key == sel_tagid %}　　
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="width: 50%">
+                            <label class="layui-form-label">模型</label>
+                            <div class="layui-input-block">
+                              <select name="model" lay-verify="required" id="model">
+                                  {% if sel_tagid %}
+                                  <option >...</option>
+                                  {% else %}
+                                  <option selected>...</option>
+                                  {% endif %}
+
+                                  {% for key in model %}
+                                  {% if key == sel_model %}　　
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+                        </div>
+                      <div class="layui-form-item" style="width: 50%">
+                        <label class="layui-form-label">是否使用态势标记结果</label>
+                        <div class="layui-input-block">
+                          <input type="radio" name="flag" value="1" title="是">
+                          <input type="radio" name="flag" value="0" title="否" checked>
+                        </div>
+                      </div>
+                        <div class="input-group mb-3" style="width: 100%">
+                            <div class="layui-form-item" style="width: 33%">
+                                <label class="layui-form-label">lookback</label>
+                                <div class="layui-input-block">
+                                  <input type="number" id="lookback"  name="lookback" required  lay-verify="required" placeholder="请输入预测长度，例如：20" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="width: 33%">
+                                <label class="layui-form-label">学习率</label>
+                                <div class="layui-input-block">
+                                  <input type="text" id="lr"   name="lr" required  lay-verify="required" placeholder="请输入学习率，例如：0.01" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="width: 33%">
+                                <label class="layui-form-label">epochs</label>
+                                <div class="layui-input-block">
+                                  <input type="number" id="epochs" name="epochs" required  lay-verify="required" placeholder="请输入epochs，例如：100" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                              <button class="layui-btn" lay-submit lay-filter="formDemo">训练模型</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br>
+
+<!--                    展示的图表1-->
+                <div class="layui-card-body " id="main1" style="width: 100%;height:780px;"></div>
+
+                <br><br>
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //各种基于事件的操作，下面会有进一步介绍
+        });
+
+    </script>
+<script type="text/javascript">
+<!--loss曲线图-->
+var chartDom = document.getElementById('main1');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  title: {
+    text: 'loss曲线'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: ['train_loss']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: {{ x1 | safe }},
+      name:'epoch'
+  },
+  yAxis: {
+    type: 'value',
+        name: 'loss',
+  },
+  series: [
+    {
+      name: 'train_loss',
+      type: 'line',
+      {#stack: 'Total',#}
+      data: {{ hist | safe }}
+    },
+  ]
+};
+
+option && myChart.setOption(option);
+
+</script>
+</body>
+
+
+</html>

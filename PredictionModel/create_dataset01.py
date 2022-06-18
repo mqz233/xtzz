@@ -6,7 +6,7 @@ from DataOperator.fluxdbOperator import fluxdbOperator
 class Createdataset:
     def __init__(self, measurement):
         self.measurement = measurement
-        self.client = fluxdbOperator()
+
     def createdataset(self):
 
         # 某一场作战路径
@@ -64,10 +64,10 @@ class Createdataset:
         # print("-")
         return output_path
 
-    def createdataset2(self,lookback):
+    def createdataset2(self):
 
-        result = self.client.select_num_battle(self.measurement)
-        staticx = []
+        result = fluxdbOperator().select_num_battle(self.measurement)
+
         fxlist = []
         ylist = []
         for i in range(len(result)):
@@ -138,99 +138,14 @@ class Createdataset:
                     xlist.append(list[j][k])
             fxlist.append(xlist)
 
-            if i == 0:
-                for aa in range(lookback):
-                    staticx.append(xlist)
-
-        return staticx, fxlist, ylist
-
-    def taishidataset(self,lookback):
-
-        result = self.client.select_num_battle(self.measurement)
-        staticx = []
-        fxlist = []
-        ylist = []
-        for i in range(len(result)):
-            list = []
-            xlist = []
-            data = result[i]
-            ylist.append(json.loads(data['svv']))
-
-            del data['sences']
-            del data['frameId']
-            del data['Time']
-            del data['time']
-            del data['name']
-            del data['svv']
-            if 'stage' in data:  ############################3
-                del data['stage']
-                del data['eval']
-
-            del data['radarList']
-            del data['locked']
-            # del data['det_pro']
-            # del data['range_acc']
-            # del data['angle_acc']
-            del data['atkList']
-            del data['conList']
-            del data['comm']
-            del data['suppressList']
-            del data['echo']
-            del data['isRed']
-            del data['type']
-            # del data['value']
-            # del data['ra_Pro_Angle']
-            # del data['ra_Pro_Radius']
-            # del data['ra_StartUp_Delay']
-            # del data['ra_Detect_Delay']
-            # del data['ra_Process_Delay']
-            # del data['ra_FindTar_Delay']
-            # del data['ra_Rang_Accuracy']
-            # del data['ra_Angle_Accuracy']
-            # del data['MisMaxAngle']
-            # del data['MisMaxRange']
-            # del data['MisMinDisescapeDis']
-            # del data['MisMaxDisescapeDis']
-            # del data['MisMaxV']
-            # del data['MisMaxOver']
-            # del data['MisLockTime']
-            # del data['MisHitPro']
-            # del data['MisMinAtkDis']
-            # del data['MisNum']
-            # del data['EchoInitState']
-            # del data['EchoFackTarNum']
-            # del data['EchoDis']
-            # del data['SupInitState']
-            # del data['SupTarNum']
-            # del data['SupMinDis']
-            # del data['SupMaxAngle']
-            del data['comNum']
-            del data['suppressNum']
-            del data['echoNum']
-
-
-            for key in data.keys():
-                data[key] = json.loads(data[key])
-                data[key] = np.array(data[key]).flatten().tolist()
-                list.append(data[key])
-            for j in range(len(list)):
-                for k in range(len(list[j])):
-                    xlist.append(list[j][k])
-            fxlist.append(xlist)
-
-            if i == 0:
-                for aa in range(lookback):
-                    staticx.append(xlist)
-
-        return staticx, fxlist, ylist
+        return fxlist,ylist
 
     def red_blue(self):
-        result = self.client.select_num_battle(self.measurement)
+        result = fluxdbOperator().select_num_battle(self.measurement)
 
         list = json.loads(result[0]['isRed'])
 
         return list
-
 
 
 

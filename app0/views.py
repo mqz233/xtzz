@@ -10,6 +10,8 @@ from django.http import JsonResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.decorators.csrf import csrf_exempt
 from django_tables2 import RequestConfig
+
+from CommunityMining.GN import GN2
 from DataOperator.communityData import community_data_op
 from DataOperator.createDataSet import Warwinner
 from DataOperator.fluxdbOperator import fluxdbOperator
@@ -336,6 +338,129 @@ def predict_formal(request):
         }
         return render(request, "predict2.html",context)
 
+def lstm_train(request):
+    #获取场景列表
+    tagid = sdo().queryTag()
+    #if post请求，获取选择的参数
+    sel_tagid = request.POST.get("tagid")
+    sel_model = request.POST.get("model")
+    if (request.POST.get("epochs")):
+        epochs = (int)(request.POST.get("epochs"))
+        lr = (float)(request.POST.get("lr"))
+        lookback = (int)(request.POST.get("lookback"))
+    # get请求，展示基础页面
+    if not (sel_tagid):
+        context = {
+            "model": ["LSTM", "GRU", "Prophet"],
+            "tagid": tagid,
+            "x1": [],
+            "hist": [],
+        }
+        return render(request, "lstm_train.html", context)
+    else:
+        flag = request.POST.get("flag")
+        measurement = str(sel_tagid)
+        #训练过程
+        from PredictionModel.trainlstm import TrainLSTM
+        if(str(flag)=="1"):
+            hist = TrainLSTM(measurement, epochs=epochs,lookback=lookback, lr=lr).trainLSTM()
+        else:
+            hist = TrainLSTM(measurement, epochs=epochs, lookback=lookback, lr=lr).trainLSTMno()
+        # print(type(hist))
+        x1 = [i + 1 for i in range(len(hist))]
+        # print(x1)
+        context1 = {
+            "sel_tagid": sel_tagid,
+            "sel_model": sel_model,
+            "tagid": tagid,
+            "model": ["LSTM", "GRU", "Prophet"],
+            "x1": x1,
+            "hist": hist,
+
+        }
+        return render(request, "lstm_train.html", context1)
+
+def lstm_predict(request):
+    #获取场景列表
+    tagid = sdo().queryTag()
+    #if post请求，获取选择的参数
+    sel_tagid = request.POST.get("tagid")
+    sel_warname = request.POST.get("warname")
+    sel_model = request.POST.get("model")
+    # get请求，展示基础页面
+    if not (sel_tagid):
+        context = {
+            "tagid": tagid,
+            "x1": [],
+            "x2": [],
+            "red1": [],
+            "red2": [],
+            "red3": [],
+            "red4": [],
+            "blue1": [],
+            "blue2": [],
+            "blue3": [],
+            "blue4": [],
+        }
+        return render(request, "lstm_predict.html", context)
+    elif (sel_warname=="..."):
+        warname = sdo().querywarname(sel_tagid)
+        datanames = os.listdir('PredictionModel/model/'+str(sel_tagid))
+        list = []
+        for i in datanames:
+            print(i)
+            list.append(i)
+        context = {
+            "tagid": tagid,
+            "sel_tagid": sel_tagid,
+            "warname":warname,
+            "model":list,
+            "x1": [],
+            "x2": [],
+            "red1": [],
+            "red2": [],
+            "red3": [],
+            "red4": [],
+            "blue1": [],
+            "blue2": [],
+            "blue3": [],
+            "blue4": [],
+        }
+        return render(request, "lstm_predict.html", context)
+    else:
+        warname = sdo().querywarname(sel_tagid)
+        datanames = os.listdir('PredictionModel/model/' + str(sel_tagid))
+        list = []
+        for i in datanames:
+            print(i)
+            list.append(i)
+
+        from PredictionModel.LSTM import PRELSTM
+        red1, red2, red3, red4, blue1, blue2, blue3, blue4 = PRELSTM(tag = sel_tagid, warname = sel_warname, filename = sel_model).PRELSTM()
+        x1 = [i + 20 for i in range(len(red1))]
+        x2 = [i + 20 for i in range(len(blue1))]
+
+        context = {
+            "tagid": tagid,
+            "sel_tagid": sel_tagid,
+            "warname": warname,
+            "model": list,
+            "sel_warname": sel_warname,
+            "sel_model": sel_model,
+            "x1": x1,
+            "x2": x2,
+            "red1": red1,
+            "red2": red2,
+            "red3": red3,
+            "red4": red4,
+            "blue1": blue1,
+            "blue2": blue2,
+            "blue3": blue3,
+            "blue4": blue4,
+        }
+        return render(request, "lstm_predict.html", context)
+    # return render(request, "predict2.html", context)
+
 
 @csrf_exempt
 def predict(request):
@@ -533,15 +658,34 @@ def chart_v2(request):
         y6 = []
         y7 = []
         y9 = []
+
+        yr1 = []
+        yr2 = []
+        yr3 = []
+        yr5 = []
+        yr6 = []
+        yr7 = []
+        yr9 = []
+
+        yb1 = []
+        yb2 = []
+        yb3 = []
+        yb5 = []
+        yb6 = []
+        yb7 = []
+        yb9 = []
         context = {
             "tag_list": tagid,
             'x': x, 'y1': y1, 'y2': y2, 'y3': y3, 'y5': y5, 'y6': y6, 'y7': y7, 'y9': y9,
+            'yr1': yr1, 'yr2': yr2, 'yr3': yr3, 'yr5': yr5, 'yr6': yr6, 'yr7': yr7, 'yr9': yr9,
+            'yb1': yb1, 'yb2': yb2, 'yb3': yb3, 'yb5': yb5, 'yb6': yb6, 'yb7': yb7, 'yb9': yb9,
         }
         return render(request, "chart_v2.html", context)
     else:
         index = request.POST.get("x_aris")
         result = sa().get_graph_data(int(index), str(tag_name))
-
+        result_red = sa().get_graph_data_red(int(index), str(tag_name))
+        result_blue = sa().get_graph_data_blue(int(index), str(tag_name))
         x = result['x']
         print(result)
         y1 = result['y'][0]
@@ -554,12 +698,87 @@ def chart_v2(request):
 
         y9 = result['y'][6]
 
+        yr1 = result_red['y'][0]
+        yr2 = result_red['y'][1]
+        yr3 = result_red['y'][2]
+
+        yr5 = result_red['y'][3]
+        yr6 = result_red['y'][4]
+        yr7 = result_red['y'][5]
+
+        yr9 = result_red['y'][6]
+
+        yb1 = result_blue['y'][0]
+        yb2 = result_blue['y'][1]
+        yb3 = result_blue['y'][2]
+
+        yb5 = result_blue['y'][3]
+        yb6 = result_blue['y'][4]
+        yb7 = result_blue['y'][5]
+
+        yb9 = result_blue['y'][6]
+
         context = {
             'x': x[0:10], 'y1': y1[0:10], 'y2': y2[0:10], 'y3': y3[0:10], 'y5': y5[0:10], 'y6': y6[0:10],
-            'y7': y7[0:10], 'y9': y9[0:10], 'x_name': index, 'tag_list': tagid,'tag_name': tag_name
+            'y7': y7[0:10], 'y9': y9[0:10],
+            'yr1': yr1[0:10], 'yr2': yr2[0:10], 'yr3': yr3[0:10], 'yr5': yr5[0:10], 'yr6': yr6[0:10],
+            'yr7': yr7[0:10], 'yr9': yr9[0:10],
+            'yb1': yb1[0:10], 'yb2': yb2[0:10], 'yb3': yb3[0:10], 'yb5': yb5[0:10], 'yb6': yb6[0:10],
+            'yb7': yb7[0:10], 'yb9': yb9[0:10],
+
+            'x_name': index, 'tag_list': tagid,'tag_name': tag_name
 
         }
         return render(request, "chart_v2.html", context)
+# def chart_v2(request):
+#     tagid = sdo().queryTag()
+#     tag_name = request.POST.get("tag_name")
+#     path = "C:\\Users\\mqz\\PycharmProjects\\xtzz1\\data\\test.json"
+#     # 读取文件数据
+#     f = open(path, 'r', encoding='utf-8')
+#     graph = json.load(f)
+#     print(graph)
+#     nodes = graph['nodes']
+#     links = graph['links']
+#     categories = graph['categories']
+#     legend = [item['name'] for item in graph['categories']]
+#     # get请求，展示基础页面
+#     if not (tag_name):
+#         x = []
+#         y1 = []
+#         y2 = []
+#         y3 = []
+#         y5 = []
+#         y6 = []
+#         y7 = []
+#         y9 = []
+#         context = {
+#             "tag_list": tagid,
+#             'x': x, 'y1': y1, 'y2': y2, 'y3': y3, 'y5': y5, 'y6': y6, 'y7': y7, 'y9': y9,'legend':legend,'nodes':nodes,'links':links,'categories':categories
+#         }
+#         return render(request, "chart_v2.html", context)
+#     else:
+#         index = request.POST.get("x_aris")
+#         result = sa().get_graph_data(int(index), str(tag_name))
+#
+#         x = result['x']
+#         print(result)
+#         y1 = result['y'][0]
+#         y2 = result['y'][1]
+#         y3 = result['y'][2]
+#
+#         y5 = result['y'][3]
+#         y6 = result['y'][4]
+#         y7 = result['y'][5]
+#
+#         y9 = result['y'][6]
+#
+#         context = {
+#             'x': x[0:10], 'y1': y1[0:10], 'y2': y2[0:10], 'y3': y3[0:10], 'y5': y5[0:10], 'y6': y6[0:10],
+#             'y7': y7[0:10], 'y9': y9[0:10], 'x_name': index, 'tag_list': tagid,'tag_name': tag_name
+#
+#         }
+#         return render(request, "chart_v2.html", context)
 
 
 @csrf_exempt
@@ -574,18 +793,119 @@ def check_contain_chinese(check_str):
 
 
 @csrf_exempt
+# def upload_zip1(request):
+#     files = request.FILES.getlist('file')
+#     # 上传zip时输入的tag
+#     tag = request.POST.get('zip_tag')
+#     if not tag:
+#         return render(request, 'upload.html', {'context': '请输入tag'})
+#     # print(type(tag.encode()))
+#     # tagid = str(tag.encode())
+#     tagid = str(tag)
+#     if(check_contain_chinese(tagid)):
+#         return render(request, 'upload.html', {'context': 'tag暂不支持中文'})
+#     print("tag", tag)
+#     if files:
+#         print("shoudao")
+#         print(files)
+#
+#     if not files:
+#         return render(request, 'upload.html', {})
+#     else:
+#         # 5.删除zip，unzip两个文件夹下所有文件
+#         for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
+#             shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
+#         del_file(readConfig().getZipRootPath())
+#         # for file in files:
+#         #     # 1.把压缩文件存到zip文件夹
+#         #     des = open(os.path.join(readConfig().getZipRootPath(), file.name), 'wb+')
+#         #     print("shoudao")
+#         #     for chunk in file.chunks():
+#         #         des.write(chunk)
+#         #     des.close()
+#         #
+#         #     # 2.解压压缩包
+#         #     if (file.name.endswith("7z")):
+#         #         with py7zr.SevenZipFile(os.path.join(readConfig().getZipRootPath(), file.name), mode='r') as z:
+#         #             z.extractall(path=readConfig().getUnZipRootPath())
+#         #             # z.close()
+#         #     else:
+#         #         zfile = zipfile.ZipFile(os.path.join(readConfig().getZipRootPath(), file.name))
+#         #         zfile.extractall(path=readConfig().getUnZipRootPath())
+#         #         zfile.close()
+#         #
+#         #     unzip = os.listdir(readConfig().getUnZipRootPath())[0]
+#         #     unzip = os.path.join(readConfig().getUnZipRootPath(), unzip)
+#         #     # 3.存动态数据
+#         #     for dir in os.listdir(unzip):
+#         #         final_path1 = unzip + '\\' + dir + '\\plane'
+#         #         final_path2 = unzip + '\\' + dir + '\\index'
+#         #         all_index_store(tagid, final_path2)
+#         #         all_plane_store(tagid, final_path1)
+#         #
+#         #     # 4.存静态数据
+#         #     for dir in os.listdir(unzip):
+#         #         final_path = unzip + '\\' + dir
+#         #         all_static_store(final_path, tagid)
+#         #
+#         #     for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
+#         #         shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
+#         #     del_file(readConfig().getZipRootPath())
+#         #     render(request, 'upload.html', {'context': '上传成功'})
+#
+#
+#
+#         try:
+#             for file in files:
+#                 # 1.把压缩文件存到zip文件夹
+#                 des = open(os.path.join(readConfig().getZipRootPath(), file.name), 'wb+')
+#                 print("shoudao")
+#                 for chunk in file.chunks():
+#                     des.write(chunk)
+#                 des.close()
+#
+#                 # 2.解压压缩包
+#                 # print(file.name)
+#                 zfile = zipfile.ZipFile(os.path.join(readConfig().getZipRootPath(), file.name))
+#                 zfile.extractall(path=readConfig().getUnZipRootPath())
+#                 zfile.close()
+#                 unzip = os.listdir(readConfig().getUnZipRootPath())[0]
+#                 unzip = os.path.join(readConfig().getUnZipRootPath(),unzip)
+#
+#                 # 3.存动态数据
+#                 for dir in os.listdir(unzip):
+#                     final_path1 = unzip+'\\'+dir+'\\plane'
+#                     final_path2 = unzip+ '\\' + dir + '\\index'
+#                     all_index_store(tagid,final_path2)
+#                     all_plane_store(tagid,final_path1)
+#
+#                 # 4.存静态数据
+#                 for dir in os.listdir(unzip):
+#                     final_path = unzip+'\\'+dir
+#                     all_static_store(final_path,tagid)
+#
+#         except Exception as e:
+#             return render(request, 'upload.html', {'context': '上传失败，请检查压缩包格式'})
+#         finally:
+#             # 5.删除zip，unzip两个文件夹下所有文件
+#             for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
+#                 shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
+#             del_file(readConfig().getZipRootPath())
+#
+#     return render(request, 'upload.html', {'context': '上传成功'})
+
 def upload_zip(request):
     files = request.FILES.getlist('file')
     # 上传zip时输入的tag
-    tag = request.POST.get('zip_tag')
-    if not tag:
-        return render(request, 'upload.html', {'context': '请输入tag'})
-    # print(type(tag.encode()))
-    # tagid = str(tag.encode())
-    tagid = str(tag)
-    if(check_contain_chinese(tagid)):
-        return render(request, 'upload.html', {'context': 'tag暂不支持中文'})
-    print("tag", tag)
+    # tag = request.POST.get('zip_tag')
+    # if not tag:
+    #     return render(request, 'upload.html', {'context': '请输入tag'})
+    # # print(type(tag.encode()))
+    # # tagid = str(tag.encode())
+    # tagid = str(tag)
+    # if(check_contain_chinese(tagid)):
+    #     return render(request, 'upload.html', {'context': 'tag暂不支持中文'})
+    # print("tag", tag)
     if files:
         print("shoudao")
         print(files)
@@ -651,6 +971,7 @@ def upload_zip(request):
                 zfile.extractall(path=readConfig().getUnZipRootPath())
                 zfile.close()
                 unzip = os.listdir(readConfig().getUnZipRootPath())[0]
+                tagid = unzip
                 unzip = os.path.join(readConfig().getUnZipRootPath(),unzip)
 
                 # 3.存动态数据
@@ -685,13 +1006,57 @@ def comm_dig(request):
     tag_name = request.POST.get("tag_name")
     print(tag_name)
     choice = request.POST.get('x_aris')
+    # 数据路径
+    path = "C:\\Users\\mqz\\PycharmProjects\\xtzz1\\data\\out1.json"
+    # 读取文件数据
+    graph = json.load(open(path))
+    # print(graph)
+    # nodes = graph['nodes']
+    # links = graph['links']
+    # categories = graph['categories']
+    # legend = [item['name']for item in graph['categories']]
+    # print(f)
+
+    # print(graph['nodes'])
     if (choice != None):
         if (choice == "一类数据挖掘分析"):
-            return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name})
+            return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
         elif(choice == "二类数据挖掘分析"):
-            return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name})
+            return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
         else:
-            return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name})
+            return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name,'graph':graph})
+
+    return render(request, 'comm_dig.html', {'tag_list': tagid})
+
+@csrf_exempt
+def comm_dig2(request):
+    tagid = sdo().queryTag()
+    # tag_name = request.POST.get("tag_name")
+    perdict_result_list = [1, 2, 3]
+    tag_name = request.POST.get("tag_name")
+    print(tag_name)
+    choice = request.POST.get('x_aris')
+    namedic = GN2(tag_name)
+    if (choice != None):
+        if (choice == "一类数据挖掘分析"):
+            # 数据路径
+            path = "CommunityMining/out0.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+
+            return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name,'graph':graph,'namedic':namedic})
+        elif(choice == "二类数据挖掘分析"):
+            # 数据路径
+            path = "CommunityMining/out1.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+            return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
+        else:
+            # 数据路径
+            path = "CommunityMining/out2.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+            return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name,'graph':graph})
 
     return render(request, 'comm_dig.html', {'tag_list': tagid})
 
@@ -1040,8 +1405,10 @@ def logout(request):
 # 动态index展示部分
 def war_list(request):
 
-    tagid = fluxdbOperator().get_index_measurements()
+    tagid = sdo().queryTag()
+    # tagid = fluxdbOperator().get_index_measurements()
     sel_tagid = request.POST.get("tagid")
+    sel_warname = request.POST.get("warname")
     print(sel_tagid)
     # get请求，展示基础页面
     if not (sel_tagid):
@@ -1049,7 +1416,17 @@ def war_list(request):
             "tagid":tagid
         }
         return render(request, "war_list.html", context)
+    elif (sel_warname=="..."):
+        warname = sdo().querywarname(sel_tagid)
+        context = {
+        "sel_tagid":sel_tagid,
+        "tagid": tagid,
+        "warname":warname
+        }
+        return render(request, "war_list.html", context)
+
     else:
+        warname = sdo().querywarname(sel_tagid)
         # post请求，展示选择的tag_id
         # 默认展示的指标
         vals1 = ["FackTarNum", "L_aver_ooda"]
@@ -1059,10 +1436,11 @@ def war_list(request):
         #   "sencesTime","taskScaleB","taskScaleR","underShootPreo","wasteScale"]
         # 根据tag_id搜
         #列名
-        names = fluxdbOperator().select_column(sel_tagid)
+        ft ='index'+sel_tagid+sel_warname
+        names = fluxdbOperator().select_column(ft)
         width = 'width:' + str(1 / len(vals1)) + '%'
         #每一项
-        queryset = fluxdbOperator().select_num_battle(str(sel_tagid))
+        queryset = fluxdbOperator().select_num_battle(str(ft))
         page_object = Pagination3(request, queryset)
         context = {
         # "queryset": queryset,  # 取数据
@@ -1071,6 +1449,8 @@ def war_list(request):
         "names": names,  # 所有的字段
         "sel_tagid":sel_tagid,
         "tagid": tagid,
+        "sel_warname":sel_warname,
+        "warname": warname,
         "vals1":vals1,
         "width":width
 
@@ -1080,16 +1460,19 @@ def war_list(request):
 # 动态index展示2
 def war_list2(request):
 
-    tagid = fluxdbOperator().get_index_measurements()
+    tagid = sdo().queryTag()
     sel_tagid = request.POST.get("tagid")
+    warname = sdo().querywarname(sel_tagid)
+    sel_warname = request.POST.get("warname")
     vals1 = request.POST.getlist('check_box_list')
     # post请求，展示选择的tag_id
     # 根据tag_id搜
     # 列名
-    names = fluxdbOperator().select_column(sel_tagid)
+    ft = 'index'+sel_tagid+sel_warname
+    names = fluxdbOperator().select_column(ft)
     width = 'width:' + str(1 / len(vals1)) + '%'
     # 每一项
-    queryset = fluxdbOperator().select_num_battle(str(sel_tagid))
+    queryset = fluxdbOperator().select_num_battle(str(ft))
     # page_object = Pagination(request, queryset)
     page_object = Pagination3(request, queryset)
     # if(request.POST.get("page")):
@@ -1105,6 +1488,8 @@ def war_list2(request):
         "names": names,  # 所有的字段
         "sel_tagid": sel_tagid,
         "tagid": tagid,
+        "sel_warname": sel_warname,
+        "warname": warname,
         "vals1": vals1,
         "width": width
 
@@ -1114,7 +1499,9 @@ def war_list2(request):
 # 动态plane展示部分
 def plane_list(request):
 
-    tagid = fluxdbOperator().get_plane_measurements()
+    tagid = sdo().queryTag()
+    sel_tagid = request.POST.get("tagid")
+    sel_warname = request.POST.get("warname")
     sel_tagid = request.POST.get("tagid")
     print(sel_tagid)
     # get请求，展示基础页面
@@ -1123,7 +1510,16 @@ def plane_list(request):
             "tagid":tagid
         }
         return render(request, "plane_list.html", context)
+    elif (sel_warname=="..."):
+        warname = sdo().querywarname(sel_tagid)
+        context = {
+        "sel_tagid":sel_tagid,
+        "tagid": tagid,
+        "warname":warname
+        }
+        return render(request, "plane_list.html", context)
     else:
+        warname = sdo().querywarname(sel_tagid)
         # post请求，展示选择的tag_id
         # 默认展示的指标
         vals1 = ["sences", "frameId","Time","name","svv"]
@@ -1140,10 +1536,12 @@ def plane_list(request):
         #   "echo"]
         # 根据tag_id搜
         #列名
-        names = fluxdbOperator().select_column(sel_tagid)
+        ft = 'plane' + sel_tagid + sel_warname
+        names = fluxdbOperator().select_column(ft)
+        # names = fluxdbOperator().select_column(sel_tagid)
         width = 'width:' + str(1 / len(vals1)) + '%'
         #每一项
-        queryset = fluxdbOperator().select_num_battle(str(sel_tagid))
+        queryset = fluxdbOperator().select_num_battle(str(ft))
         page_object = Pagination3(request, queryset)
         context = {
         # "queryset": queryset,  # 取数据
@@ -1152,6 +1550,8 @@ def plane_list(request):
         "names": names,  # 所有的字段
         "sel_tagid":sel_tagid,
         "tagid": tagid,
+        "sel_warname": sel_warname,
+        "warname": warname,
         "vals1":vals1,
         "width":width
 
@@ -1161,16 +1561,20 @@ def plane_list(request):
 # plane展示部分2
 def plane_list2(request):
 
-    tagid = fluxdbOperator().get_plane_measurements()
+    tagid = sdo().queryTag()
     sel_tagid = request.POST.get("tagid")
+    warname = sdo().querywarname(sel_tagid)
+    sel_warname = request.POST.get("warname")
     vals1 = request.POST.getlist('check_box_list')
     # post请求，展示选择的tag_id
     # 根据tag_id搜
     # 列名
-    names = fluxdbOperator().select_column(sel_tagid)
+    ft = 'plane' + sel_tagid + sel_warname
+    names = fluxdbOperator().select_column(ft)
+    # names = fluxdbOperator().select_column(sel_tagid)
     width = 'width:' + str(1 / len(vals1)) + '%'
     # 每一项
-    queryset = fluxdbOperator().select_num_battle(str(sel_tagid))
+    queryset = fluxdbOperator().select_num_battle(str(ft))
     # page_object = Pagination(request, queryset)
     page_object = Pagination3(request, queryset)
     # if(request.POST.get("page")):
@@ -1186,6 +1590,8 @@ def plane_list2(request):
         "names": names,  # 所有的字段
         "sel_tagid": sel_tagid,
         "tagid": tagid,
+        "sel_warname": sel_warname,
+        "warname": warname,
         "vals1": vals1,
         "width": width
 
@@ -1380,17 +1786,40 @@ def win_info(request):
         return render(request, "win_info.html", context)
 
 def index_mark(request):
-    #取表名
-    tagid = fluxdbOperator().get_plane_measurements()
-    #取选中的tagid
+    # 获取场景列表
+    tagid = sdo().queryTag()
+    # if post请求，获取选择的参数
+    sel_warname = request.POST.get("warname")
     sel_tagid = request.POST.get("tagid")
+    # print(request.POST.get("stage"+str(1)))
     # get请求，展示基础页面
     if not (sel_tagid):
         context = {
             "tagid": tagid
         }
         return render(request, "index_mark.html", context)
+    elif(sel_warname=="..."):
+        warname = sdo().querywarname(sel_tagid)
+        context = {
+            # "page_string": page_object.html(),  # 取页码
+            "sel_tagid": sel_tagid,
+            "tagid": tagid,
+            "warname":warname,
+            "sel_warname":sel_warname,
+
+
+        }
+        return render(request, "index_mark.html", context)
     else:
+        warname = sdo().querywarname(sel_tagid)
+        # 更新指标部分
+        a = 1
+        while (request.POST.get("stage" + str(a))):
+            stage = request.POST.get("stage" + str(a))
+            eval = request.POST.get("eval" + str(a))
+            ft = 'plane'+sel_tagid+sel_warname
+            editpos(str(ft), str(a), str(stage), str(eval))
+            a += 50
         # post请求，展示选择的tag_id
         # 默认展示的指标
         vals1 = ["frameId", "stage", "eval"]
@@ -1398,19 +1827,22 @@ def index_mark(request):
         width = 'width:' + str(1 / len(vals1)) + '%'
         # 每一项
         client = fluxdbOperator()
-        result = client.select_num_battle(str(sel_tagid))
+        ft = 'plane' + sel_tagid + sel_warname
+        result = client.select_num_battle(str(ft))
         queryset = []
         for i in range(0, len(result), 50):
             queryset.append(result[i])
         # queryset = fluxdbOperator().select_num_battle(str(sel_tagid))
         page = request.GET.get("page")
-        print("list",page)
-        page_object = Pagination3(request, queryset)
+        # print("list",page)
+        # page_object = Pagination3(request, queryset)
         context = {
-            "queryset": page_object.page_queryset,  # 取数据
-            "page_string": page_object.html(),  # 取页码
+            "queryset": queryset,  # 取数据
+            # "page_string": page_object.html(),  # 取页码
             "sel_tagid": sel_tagid,
             "tagid": tagid,
+            "warname": warname,
+            "sel_warname": sel_warname,
             "vals1": vals1,
             "width": width,
             "page": page

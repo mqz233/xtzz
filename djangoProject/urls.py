@@ -18,10 +18,11 @@ from django.urls import path
 
 import app0
 from app0.views import index, form_test, back_test, login, logout, upload_test, headpage, upload_test2, \
-    analyse, predict_formal, predict, system_upload, chart_part, pos_reg, pos_pre, upload_page,  \
+    analyse, predict_formal, predict, system_upload, chart_part, pos_reg, pos_pre, upload_page, \
     comm_dig, chart_v2, upload_zip, admin_manage, admin_add, admin_edit, admin_delete, admin_reset, image_code, \
     war_list, frame_list, frame_add, frame_edit, frame_delete, index_list, index_edit, \
-    index_delete, war_list2, plane_list2, plane_list, community_data, win_info, index_mark, index_mark_edit, al_run
+    index_delete, war_list2, plane_list2, plane_list, community_data, win_info, index_mark, index_mark_edit, al_run, \
+    lstm_train, lstm_predict
 
 # from django.conf.urls import handler404, handler500
 
@@ -88,6 +89,9 @@ urlpatterns = [
     path('<slug:page>/<slug:stage>/<slug:eval>/<slug:slug>/<int:nid>/index_mark_edit/', index_mark_edit),
     #外部算法调用
     path('al_run/', al_run),
+    #lstm训练模型 预测结果
+    path('lstm_train/',lstm_train),
+    path('lstm_predict/',lstm_predict)
 
 
 ]

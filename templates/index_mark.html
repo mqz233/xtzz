@@ -28,12 +28,12 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <form class="layui-form" action="/index_mark/" method="post" id="myForm">
+                    <form class="layui-form" action="/index_mark/" method="post" id="myForm" >
                         {% csrf_token %}
-                        <div class="layui-form-item" style="width: 50%">
-                            <label class="layui-form-label">表名</label>
+                         <div class="layui-form-item" style="width: 50%">
+                            <label class="layui-form-label">场景</label>
                             <div class="layui-input-block">
-                              <select name="tagid" lay-verify="required" id="tagid">
+                              <select name="tagid" lay-verify="required" id="tagid" lay-filter="test">
                                   {% if sel_tagid %}
                                   <option >...</option>
                                   {% else %}
@@ -42,22 +42,56 @@
 
                                   {% for key in tagid %}
                                   {% if key == sel_tagid %}　　
-                                    <option selected value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
                                   {% else %}
-                                    <option value="{{ key }}" hassubinfo="true">{{ key|deal_tag }}</option>
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
                                   {% endif %}
                                   {% endfor %}
                               </select>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                    <div class="layui-input-block">
-                      <button class="layui-btn" lay-submit lay-filter="formDemo">查询</button>
-                    </div>
-                  </div>
+                        <div class="layui-form-item" style="width: 50%">
+                            <label class="layui-form-label">场次</label>
+                            <div class="layui-input-block">
+                              <select name="warname" lay-verify="required" id="warname" lay-filter="test">
+                                  {% if sel_warname %}
+                                  <option >...</option>
+                                  {% else %}
+                                  <option selected>...</option>
+                                  {% endif %}
+
+                                  {% for key in warname %}
+                                  {% if key == sel_warname %}　　
+                                    <option selected value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% else %}
+                                    <option value="{{ key }}" hassubinfo="true">{{ key }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                              </select>
+                            </div>
+                        </div>
                     </form>
                 </div>
-            {% if sel_tagid %}
+            {% if sel_warname and sel_warname != "..."%}
+                <form class="layui-form" action="/index_mark/" method="post" id="choose">
+                    {% csrf_token %}
+                    <div class="layui-form-item" style="display: none">
+                            <label class="layui-form-label">场次</label>
+                            <div class="layui-input-block">
+                              <select name="tagid" lay-verify="required" id="tagid">
+                                    <option selected value="{{ sel_tagid }}" hassubinfo="true"></option>
+                              </select>
+                                <select name="warname" lay-verify="required" id="tagid">
+                                    <option selected value="{{ sel_warname }}" hassubinfo="true"></option>
+                              </select>
+                            </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">更新</button>
+                        </div>
+                    </div>
+                </form>
                 <div class="layui-card-body ">
                     <div class="panel panel-default" style="overflow:scroll;">
                         <div class="panel-heading">
@@ -70,20 +104,14 @@
                                 {% for obj in vals1 %}
                                     <th style={{ width}}>{{ obj }}</th>
                                 {% endfor %}
-                                <th style={{ width}}>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                         {% for obj in queryset %}
-
-{#                            3.自定义模板标签#}
                             <tr>
                                 {% for item in vals1 %}
                                     <td>{{ obj|get_dict_attr2:item }}</td>
                                 {% endfor %}
-                                <td>
-                                <a class="btn btn-primary btn-xs" href="/{% if page  %}{{ page }}{% else %}1{% endif %}/{% if obj.stage  %}{{ obj.stage }}{% else %}A{% endif %}/{% if obj.eval  %}{{ obj.eval }}{% else %}1{% endif %}/{{ sel_tagid }}/{{obj.frameId}}/index_mark_edit/">编辑</a>
-                                </td>
                             </tr>
 
                         {% endfor %}
@@ -91,13 +119,7 @@
                         </table>
                     </div>
                </div>
-                <div class="layui-card-body ">
-                    <div class="clearfix">
-                        <ul class="pagination">
-                            {{ page_string }}
-                        </ul>
-                    </div>
-                </div>
+
             {% endif %}
 
             </div>
@@ -112,6 +134,12 @@
 <script>
         layui.use('form', function(){
           var form = layui.form;
+
+          form.on('select(test)', function(data){
+              console.log(data.value);
+              document.getElementById("myForm").action="/index_mark/"
+              document.getElementById("myForm").submit();
+            });
 
           //各种基于事件的操作，下面会有进一步介绍
         });

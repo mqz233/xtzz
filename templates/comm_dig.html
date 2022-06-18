@@ -3,12 +3,14 @@
 <head>
     <head>
         <meta charset="UTF-8">
-        <script src="/static/js/echarts.min.js"></script>
+          <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3-rc.1/echarts.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+{#        <script src="/static/js/echarts.min.js"></script>#}
         <link rel="stylesheet" href="/static/css/charts.css">
         <link rel="stylesheet" href="/static/css/font.css">
         <link rel="stylesheet" href="/static/css/xadmin.css">
         <link rel="stylesheet" href="/static/css/theme5.css">
-        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+{#        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>#}
         <script src="/static/js/jquery.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="/static/js/xadmin.js"></script>
         <link rel="stylesheet" href="/static/css/bootstrap.min.css">
@@ -68,15 +70,16 @@
 
                     </div>
 
+                <div id="main" style="width:100%; height:710px"></div>
 
-                    <div class="layui-card-body " id="comm1" style="display: none">
-
-                        <img src="../static/image/dk_community.png">
-                    </div>
-                    <div class="layui-card-body " id="comm2" style="display: none">
-                        <img src="../static/image/gj_community.png">
-
-                    </div>
+{#                    <div class="layui-card-body " id="comm1" style="display: none">#}
+{##}
+{#                        <img src="../static/image/dk_community.png">#}
+{#                    </div>#}
+{#                    <div class="layui-card-body " id="comm2" style="display: none">#}
+{#                        <img src="../static/image/gj_community.png">#}
+{##}
+{#                    </div>#}
                 </div>
             </div>
         </div>
@@ -84,13 +87,65 @@
 </div>
 </body>
 <script>
-    if ('{{ choice }}' == '1') {
-        document.getElementById('comm1').style.display = 'block'
-    } else if ('{{ choice }}' == '2') {
-        document.getElementById('comm2').style.display = 'block'
-    } else if ('{{ choice }}' == '3'){
-        document.getElementById('comm2').style.display = 'block'
-    } else {
+var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
+{#myChart.showLoading();#}
+var graph = {{ graph|safe }};
+console.log(graph);
+graph.nodes.forEach(function (node) {
+    node.symbolSize = 5;
+  });
 
-    }
+option = {
+    title: {
+      text: ' ',
+      subtext: 'Default layout',
+      top: 'bottom',
+      left: 'right'
+    },
+    tooltip: {},
+    legend: [
+      {
+        // selectedMode: 'single',
+        data: graph.categories.map(function (a) {
+          return a.name;
+        })
+      }
+    ],
+    series: [
+      {
+        name: ' ',
+        type: 'graph',
+        layout: 'force',
+        data: graph.nodes,
+        links: graph.links,
+        categories: graph.categories,
+        roam: true,
+        label: {
+            show: true,
+          position: 'right'
+        },
+        force: {
+          repulsion: 100
+        }
+      }
+    ]
+  };
+myChart.setOption(option);
+option && myChart.setOption(option);
+{#myChart.hideLoading();#}
+
 </script>
+{#<script>#}
+{#    if ('{{ choice }}' == '1') {#}
+{#        document.getElementById('comm1').style.display = 'block'#}
+{#    } else if ('{{ choice }}' == '2') {#}
+{#        document.getElementById('comm2').style.display = 'block'#}
+{#    } else if ('{{ choice }}' == '3'){#}
+{#        document.getElementById('comm2').style.display = 'block'#}
+{#    } else {#}
+{##}
+{#    }#}
+{#</script>#}
+
