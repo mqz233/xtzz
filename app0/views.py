@@ -1,8 +1,8 @@
 import json
 import os
 import shutil
+import time
 import zipfile
-import py7zr
 import django_tables2 as tables
 from django.contrib import messages
 from django.db import models
@@ -403,18 +403,9 @@ def lstm_predict(request):
             "blue4": [],
         }
         return render(request, "lstm_predict.html", context)
-    elif (sel_warname=="..."):
-        warname = sdo().querywarname(sel_tagid)
-        datanames = os.listdir('PredictionModel/model/'+str(sel_tagid))
-        list = []
-        for i in datanames:
-            print(i)
-            list.append(i)
+    elif not (os.path.exists('PredictionModel/model/'+str(sel_tagid))):
         context = {
             "tagid": tagid,
-            "sel_tagid": sel_tagid,
-            "warname":warname,
-            "model":list,
             "x1": [],
             "x2": [],
             "red1": [],
@@ -425,8 +416,34 @@ def lstm_predict(request):
             "blue2": [],
             "blue3": [],
             "blue4": [],
+            "message":"请先训练该场景下的模型!"
         }
         return render(request, "lstm_predict.html", context)
+    elif (sel_warname=="..."):
+        warname = sdo().querywarname(sel_tagid)
+        if(os.listdir('PredictionModel/model/'+str(sel_tagid))):
+            datanames = os.listdir('PredictionModel/model/'+str(sel_tagid))
+            list = []
+            for i in datanames:
+                print(i)
+                list.append(i)
+            context = {
+                "tagid": tagid,
+                "sel_tagid": sel_tagid,
+                "warname":warname,
+                "model":list,
+                "x1": [],
+                "x2": [],
+                "red1": [],
+                "red2": [],
+                "red3": [],
+                "red4": [],
+                "blue1": [],
+                "blue2": [],
+                "blue3": [],
+                "blue4": [],
+            }
+            return render(request, "lstm_predict.html", context)
     else:
         warname = sdo().querywarname(sel_tagid)
         datanames = os.listdir('PredictionModel/model/' + str(sel_tagid))
@@ -639,11 +656,6 @@ def community_data(request):
         return render(request, 'community_data_mine.html',
                       { "tag_list": tagid,})
 
-
-# @csrf_exempt
-# def chart_v2(request):
-#     return render(request, 'chart_v2.html')
-
 @csrf_exempt
 def chart_v2(request):
     tagid = sdo().queryTag()
@@ -655,30 +667,22 @@ def chart_v2(request):
         y2 = []
         y3 = []
         y5 = []
-        y6 = []
-        y7 = []
-        y9 = []
 
         yr1 = []
         yr2 = []
         yr3 = []
         yr5 = []
-        yr6 = []
-        yr7 = []
-        yr9 = []
 
         yb1 = []
         yb2 = []
         yb3 = []
         yb5 = []
-        yb6 = []
-        yb7 = []
-        yb9 = []
+
         context = {
             "tag_list": tagid,
-            'x': x, 'y1': y1, 'y2': y2, 'y3': y3, 'y5': y5, 'y6': y6, 'y7': y7, 'y9': y9,
-            'yr1': yr1, 'yr2': yr2, 'yr3': yr3, 'yr5': yr5, 'yr6': yr6, 'yr7': yr7, 'yr9': yr9,
-            'yb1': yb1, 'yb2': yb2, 'yb3': yb3, 'yb5': yb5, 'yb6': yb6, 'yb7': yb7, 'yb9': yb9,
+            'x': x, 'y1': y1, 'y2': y2, 'y3': y3, 'y5': y5,
+            'yr1': yr1, 'yr2': yr2, 'yr3': yr3, 'yr5': yr5,
+            'yb1': yb1, 'yb2': yb2, 'yb3': yb3, 'yb5': yb5,
         }
         return render(request, "chart_v2.html", context)
     else:
@@ -691,95 +695,26 @@ def chart_v2(request):
         y1 = result['y'][0]
         y2 = result['y'][1]
         y3 = result['y'][2]
-
         y5 = result['y'][3]
-        y6 = result['y'][4]
-        y7 = result['y'][5]
-
-        y9 = result['y'][6]
 
         yr1 = result_red['y'][0]
         yr2 = result_red['y'][1]
         yr3 = result_red['y'][2]
-
         yr5 = result_red['y'][3]
-        yr6 = result_red['y'][4]
-        yr7 = result_red['y'][5]
-
-        yr9 = result_red['y'][6]
 
         yb1 = result_blue['y'][0]
         yb2 = result_blue['y'][1]
         yb3 = result_blue['y'][2]
-
         yb5 = result_blue['y'][3]
-        yb6 = result_blue['y'][4]
-        yb7 = result_blue['y'][5]
-
-        yb9 = result_blue['y'][6]
 
         context = {
-            'x': x[0:10], 'y1': y1[0:10], 'y2': y2[0:10], 'y3': y3[0:10], 'y5': y5[0:10], 'y6': y6[0:10],
-            'y7': y7[0:10], 'y9': y9[0:10],
-            'yr1': yr1[0:10], 'yr2': yr2[0:10], 'yr3': yr3[0:10], 'yr5': yr5[0:10], 'yr6': yr6[0:10],
-            'yr7': yr7[0:10], 'yr9': yr9[0:10],
-            'yb1': yb1[0:10], 'yb2': yb2[0:10], 'yb3': yb3[0:10], 'yb5': yb5[0:10], 'yb6': yb6[0:10],
-            'yb7': yb7[0:10], 'yb9': yb9[0:10],
-
+            'x': x[0:10], 'y1': y1[0:10], 'y2': y2[0:10], 'y3': y3[0:10], 'y5': y5[0:10],
+            'yr1': yr1[0:10], 'yr2': yr2[0:10], 'yr3': yr3[0:10], 'yr5': yr5[0:10],
+            'yb1': yb1[0:10], 'yb2': yb2[0:10], 'yb3': yb3[0:10], 'yb5': yb5[0:10],
             'x_name': index, 'tag_list': tagid,'tag_name': tag_name
 
         }
         return render(request, "chart_v2.html", context)
-# def chart_v2(request):
-#     tagid = sdo().queryTag()
-#     tag_name = request.POST.get("tag_name")
-#     path = "C:\\Users\\mqz\\PycharmProjects\\xtzz1\\data\\test.json"
-#     # 读取文件数据
-#     f = open(path, 'r', encoding='utf-8')
-#     graph = json.load(f)
-#     print(graph)
-#     nodes = graph['nodes']
-#     links = graph['links']
-#     categories = graph['categories']
-#     legend = [item['name'] for item in graph['categories']]
-#     # get请求，展示基础页面
-#     if not (tag_name):
-#         x = []
-#         y1 = []
-#         y2 = []
-#         y3 = []
-#         y5 = []
-#         y6 = []
-#         y7 = []
-#         y9 = []
-#         context = {
-#             "tag_list": tagid,
-#             'x': x, 'y1': y1, 'y2': y2, 'y3': y3, 'y5': y5, 'y6': y6, 'y7': y7, 'y9': y9,'legend':legend,'nodes':nodes,'links':links,'categories':categories
-#         }
-#         return render(request, "chart_v2.html", context)
-#     else:
-#         index = request.POST.get("x_aris")
-#         result = sa().get_graph_data(int(index), str(tag_name))
-#
-#         x = result['x']
-#         print(result)
-#         y1 = result['y'][0]
-#         y2 = result['y'][1]
-#         y3 = result['y'][2]
-#
-#         y5 = result['y'][3]
-#         y6 = result['y'][4]
-#         y7 = result['y'][5]
-#
-#         y9 = result['y'][6]
-#
-#         context = {
-#             'x': x[0:10], 'y1': y1[0:10], 'y2': y2[0:10], 'y3': y3[0:10], 'y5': y5[0:10], 'y6': y6[0:10],
-#             'y7': y7[0:10], 'y9': y9[0:10], 'x_name': index, 'tag_list': tagid,'tag_name': tag_name
-#
-#         }
-#         return render(request, "chart_v2.html", context)
-
 
 @csrf_exempt
 def community_mine(request):
@@ -793,119 +728,8 @@ def check_contain_chinese(check_str):
 
 
 @csrf_exempt
-# def upload_zip1(request):
-#     files = request.FILES.getlist('file')
-#     # 上传zip时输入的tag
-#     tag = request.POST.get('zip_tag')
-#     if not tag:
-#         return render(request, 'upload.html', {'context': '请输入tag'})
-#     # print(type(tag.encode()))
-#     # tagid = str(tag.encode())
-#     tagid = str(tag)
-#     if(check_contain_chinese(tagid)):
-#         return render(request, 'upload.html', {'context': 'tag暂不支持中文'})
-#     print("tag", tag)
-#     if files:
-#         print("shoudao")
-#         print(files)
-#
-#     if not files:
-#         return render(request, 'upload.html', {})
-#     else:
-#         # 5.删除zip，unzip两个文件夹下所有文件
-#         for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
-#             shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
-#         del_file(readConfig().getZipRootPath())
-#         # for file in files:
-#         #     # 1.把压缩文件存到zip文件夹
-#         #     des = open(os.path.join(readConfig().getZipRootPath(), file.name), 'wb+')
-#         #     print("shoudao")
-#         #     for chunk in file.chunks():
-#         #         des.write(chunk)
-#         #     des.close()
-#         #
-#         #     # 2.解压压缩包
-#         #     if (file.name.endswith("7z")):
-#         #         with py7zr.SevenZipFile(os.path.join(readConfig().getZipRootPath(), file.name), mode='r') as z:
-#         #             z.extractall(path=readConfig().getUnZipRootPath())
-#         #             # z.close()
-#         #     else:
-#         #         zfile = zipfile.ZipFile(os.path.join(readConfig().getZipRootPath(), file.name))
-#         #         zfile.extractall(path=readConfig().getUnZipRootPath())
-#         #         zfile.close()
-#         #
-#         #     unzip = os.listdir(readConfig().getUnZipRootPath())[0]
-#         #     unzip = os.path.join(readConfig().getUnZipRootPath(), unzip)
-#         #     # 3.存动态数据
-#         #     for dir in os.listdir(unzip):
-#         #         final_path1 = unzip + '\\' + dir + '\\plane'
-#         #         final_path2 = unzip + '\\' + dir + '\\index'
-#         #         all_index_store(tagid, final_path2)
-#         #         all_plane_store(tagid, final_path1)
-#         #
-#         #     # 4.存静态数据
-#         #     for dir in os.listdir(unzip):
-#         #         final_path = unzip + '\\' + dir
-#         #         all_static_store(final_path, tagid)
-#         #
-#         #     for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
-#         #         shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
-#         #     del_file(readConfig().getZipRootPath())
-#         #     render(request, 'upload.html', {'context': '上传成功'})
-#
-#
-#
-#         try:
-#             for file in files:
-#                 # 1.把压缩文件存到zip文件夹
-#                 des = open(os.path.join(readConfig().getZipRootPath(), file.name), 'wb+')
-#                 print("shoudao")
-#                 for chunk in file.chunks():
-#                     des.write(chunk)
-#                 des.close()
-#
-#                 # 2.解压压缩包
-#                 # print(file.name)
-#                 zfile = zipfile.ZipFile(os.path.join(readConfig().getZipRootPath(), file.name))
-#                 zfile.extractall(path=readConfig().getUnZipRootPath())
-#                 zfile.close()
-#                 unzip = os.listdir(readConfig().getUnZipRootPath())[0]
-#                 unzip = os.path.join(readConfig().getUnZipRootPath(),unzip)
-#
-#                 # 3.存动态数据
-#                 for dir in os.listdir(unzip):
-#                     final_path1 = unzip+'\\'+dir+'\\plane'
-#                     final_path2 = unzip+ '\\' + dir + '\\index'
-#                     all_index_store(tagid,final_path2)
-#                     all_plane_store(tagid,final_path1)
-#
-#                 # 4.存静态数据
-#                 for dir in os.listdir(unzip):
-#                     final_path = unzip+'\\'+dir
-#                     all_static_store(final_path,tagid)
-#
-#         except Exception as e:
-#             return render(request, 'upload.html', {'context': '上传失败，请检查压缩包格式'})
-#         finally:
-#             # 5.删除zip，unzip两个文件夹下所有文件
-#             for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
-#                 shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
-#             del_file(readConfig().getZipRootPath())
-#
-#     return render(request, 'upload.html', {'context': '上传成功'})
-
 def upload_zip(request):
     files = request.FILES.getlist('file')
-    # 上传zip时输入的tag
-    # tag = request.POST.get('zip_tag')
-    # if not tag:
-    #     return render(request, 'upload.html', {'context': '请输入tag'})
-    # # print(type(tag.encode()))
-    # # tagid = str(tag.encode())
-    # tagid = str(tag)
-    # if(check_contain_chinese(tagid)):
-    #     return render(request, 'upload.html', {'context': 'tag暂不支持中文'})
-    # print("tag", tag)
     if files:
         print("shoudao")
         print(files)
@@ -917,45 +741,6 @@ def upload_zip(request):
         for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
             shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
         del_file(readConfig().getZipRootPath())
-        # for file in files:
-        #     # 1.把压缩文件存到zip文件夹
-        #     des = open(os.path.join(readConfig().getZipRootPath(), file.name), 'wb+')
-        #     print("shoudao")
-        #     for chunk in file.chunks():
-        #         des.write(chunk)
-        #     des.close()
-        #
-        #     # 2.解压压缩包
-        #     if (file.name.endswith("7z")):
-        #         with py7zr.SevenZipFile(os.path.join(readConfig().getZipRootPath(), file.name), mode='r') as z:
-        #             z.extractall(path=readConfig().getUnZipRootPath())
-        #             # z.close()
-        #     else:
-        #         zfile = zipfile.ZipFile(os.path.join(readConfig().getZipRootPath(), file.name))
-        #         zfile.extractall(path=readConfig().getUnZipRootPath())
-        #         zfile.close()
-        #
-        #     unzip = os.listdir(readConfig().getUnZipRootPath())[0]
-        #     unzip = os.path.join(readConfig().getUnZipRootPath(), unzip)
-        #     # 3.存动态数据
-        #     for dir in os.listdir(unzip):
-        #         final_path1 = unzip + '\\' + dir + '\\plane'
-        #         final_path2 = unzip + '\\' + dir + '\\index'
-        #         all_index_store(tagid, final_path2)
-        #         all_plane_store(tagid, final_path1)
-        #
-        #     # 4.存静态数据
-        #     for dir in os.listdir(unzip):
-        #         final_path = unzip + '\\' + dir
-        #         all_static_store(final_path, tagid)
-        #
-        #     for dir_list in os.listdir(readConfig().getUnZipRootPath()):  # 删除unzip下的所有文件
-        #         shutil.rmtree(os.path.join(readConfig().getUnZipRootPath(), dir_list))
-        #     del_file(readConfig().getZipRootPath())
-        #     render(request, 'upload.html', {'context': '上传成功'})
-
-
-
         try:
             for file in files:
                 # 1.把压缩文件存到zip文件夹
@@ -980,6 +765,7 @@ def upload_zip(request):
                     final_path2 = unzip+ '\\' + dir + '\\index'
                     all_index_store(tagid,final_path2)
                     all_plane_store(tagid,final_path1)
+                    time.sleep(1)
 
                 # 4.存静态数据
                 for dir in os.listdir(unzip):
@@ -1001,15 +787,39 @@ def upload_zip(request):
 @csrf_exempt
 def comm_dig(request):
     tagid = sdo().queryTag()
-    # tag_name = request.POST.get("tag_name")
-    perdict_result_list = [1, 2, 3]
     tag_name = request.POST.get("tag_name")
     print(tag_name)
     choice = request.POST.get('x_aris')
+    if (choice != None):
+        namedic = GN2(tag_name)
+        if (choice == "一类数据挖掘分析"):
+            # 数据路径
+            path = "CommunityMining/out0.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+
+            return render(request, 'comm_dig.html',
+                          {'choice': 1, 'tag_list': tagid, "tag_name": tag_name, 'graph': graph, 'namedic': namedic})
+        elif (choice == "二类数据挖掘分析"):
+            # 数据路径
+            path = "CommunityMining/out0.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+            return render(request, 'comm_dig.html',
+                          {'choice': 2, 'tag_list': tagid, "tag_name": tag_name, 'graph': graph, 'namedic': namedic})
+        else:
+            # 数据路径
+            path = "CommunityMining/out0.json"
+            # 读取文件数据
+            graph = json.load(open(path))
+            return render(request, 'comm_dig.html',
+                          {'choice': 3, 'tag_list': tagid, "tag_name": tag_name, 'graph': graph, 'namedic': namedic})
+
+    return render(request, 'comm_dig.html', {'tag_list': tagid})
     # 数据路径
-    path = "C:\\Users\\mqz\\PycharmProjects\\xtzz1\\data\\out1.json"
+    # path = "C:\\Users\\mqz\\PycharmProjects\\xtzz1\\data\\out1.json"
     # 读取文件数据
-    graph = json.load(open(path))
+    # graph = json.load(open(path))
     # print(graph)
     # nodes = graph['nodes']
     # links = graph['links']
@@ -1018,47 +828,15 @@ def comm_dig(request):
     # print(f)
 
     # print(graph['nodes'])
-    if (choice != None):
-        if (choice == "一类数据挖掘分析"):
-            return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
-        elif(choice == "二类数据挖掘分析"):
-            return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
-        else:
-            return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name,'graph':graph})
-
-    return render(request, 'comm_dig.html', {'tag_list': tagid})
-
-@csrf_exempt
-def comm_dig2(request):
-    tagid = sdo().queryTag()
-    # tag_name = request.POST.get("tag_name")
-    perdict_result_list = [1, 2, 3]
-    tag_name = request.POST.get("tag_name")
-    print(tag_name)
-    choice = request.POST.get('x_aris')
-    namedic = GN2(tag_name)
-    if (choice != None):
-        if (choice == "一类数据挖掘分析"):
-            # 数据路径
-            path = "CommunityMining/out0.json"
-            # 读取文件数据
-            graph = json.load(open(path))
-
-            return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name,'graph':graph,'namedic':namedic})
-        elif(choice == "二类数据挖掘分析"):
-            # 数据路径
-            path = "CommunityMining/out1.json"
-            # 读取文件数据
-            graph = json.load(open(path))
-            return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name,'graph':graph})
-        else:
-            # 数据路径
-            path = "CommunityMining/out2.json"
-            # 读取文件数据
-            graph = json.load(open(path))
-            return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name,'graph':graph})
-
-    return render(request, 'comm_dig.html', {'tag_list': tagid})
+    # if (choice != None):
+    #     if (choice == "一类数据挖掘分析"):
+    #         return render(request, 'comm_dig.html', {'choice': 1, 'tag_list': tagid,"tag_name":tag_name,'graph':graph,'namedic':namedic})
+    #     elif(choice == "二类数据挖掘分析"):
+    #         return render(request, 'comm_dig.html', {'choice': 2, 'tag_list': tagid,"tag_name":tag_name,'graph':graph,'namedic':namedic})
+    #     else:
+    #         return render(request, 'comm_dig.html', {'choice': 3, 'tag_list': tagid, "tag_name": tag_name,'graph':graph,'namedic':namedic})
+    #
+    # return render(request, 'comm_dig.html', {'tag_list': tagid})
 
 
 @csrf_exempt

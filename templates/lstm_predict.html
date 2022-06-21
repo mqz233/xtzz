@@ -117,7 +117,12 @@
 
 </div>
 
-
+<script>
+    if ('{{ message }}') {
+        {#console.log('{{ context }}')#}
+        alert('{{ message }}')
+    }
+</script>
 
 
 
@@ -217,7 +222,7 @@ option = {
     trigger: 'axis'
   },
   legend: {
-    data: ['实际', '下一帧','结果','第一帧']
+    data: ['实际', '下一帧预测','结果预测','静态结果预测']
   },
   grid: {
     left: '3%',
@@ -248,19 +253,19 @@ option = {
       data: {{ blue1 | safe }}
     },
     {
-      name: '下一帧',
+      name: '下一帧预测',
       type: 'line',
       {#stack: 'Total',#}
       data: {{ blue2 | safe }}
     },
       {
-      name: '结果',
+      name: '结果预测',
       type: 'line',
       {#stack: 'Total',#}
       data: {{ blue3 | safe }}
     },
           {
-      name: '第一帧',
+      name: '静态结果预测',
       type: 'line',
       {#stack: 'Total',#}
       data: {{ blue4 | safe }}

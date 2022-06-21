@@ -92,16 +92,8 @@
     {{ y2 | safe }}
     var y3 =
     {{ y3 | safe }}
-
     var y5 =
     {{ y5 | safe }}
-    var y6 =
-    {{ y6 | safe }}
-    var y7 =
-    {{ y7 | safe }}
-
-    var y9 =
-    {{ y9 | safe }}
 
     var yr1 =
     {{ yr1 | safe }}
@@ -109,16 +101,8 @@
     {{ yr2 | safe }}
     var yr3 =
     {{ yr3 | safe }}
-
     var yr5 =
     {{ yr5 | safe }}
-    var yr6 =
-    {{ yr6 | safe }}
-    var yr7 =
-    {{ yr7 | safe }}
-
-    var yr9 =
-    {{ yr9 | safe }}
 
     var yb1 =
     {{ yb1 | safe }}
@@ -126,16 +110,8 @@
     {{ yb2 | safe }}
     var yb3 =
     {{ yb3 | safe }}
-
     var yb5 =
     {{ yb5 | safe }}
-    var yb6 =
-    {{ yb6 | safe }}
-    var yb7 =
-    {{ yb7 | safe }}
-
-    var yb9 =
-    {{ yb9 | safe }}
 
     switch ({{x_name}}) {
         {#case 12:#}
@@ -159,28 +135,11 @@
         case 6:
             x2_name = "光电探测僚机 - 最大截获距离";
             break;
-        {#case 7:#}
-        {#    x2_name = "灵巧对抗-距离精度";#}
-        {#    break;#}
-        {#case 8:#}
-        {#    x2_name = "灵巧对抗-角度精度";#}
-        {#    break;#}
-        {#case 9:#}
-        {#    x2_name = "预警单元-探测距离";#}
-        {#    break;#}
-        {#case 10:#}
-        {#    x2_name = "预警单元-距离精度";#}
-        {#    break;#}
-        {#case 11:#}
-        {#    x2_name = "预警单元-角度精度";#}
-        {#    break;#}
     }
-    document.getElementById('fault_choice').innerText = x2_name
-    document.getElementById('fault_choice').value = {{x_name}}
+        document.getElementById('fault_choice').innerText = x2_name
+        document.getElementById('fault_choice').value = {{x_name}}
         document.getElementById('{{x_name}}').style.display = "none"
-    {#     '有人机', '攻击僚机（雷）', '诱饵僚机（光）', '诱饵僚机（电）', #}
-    {#    'F35-C','E2D','预警机','攻击僚机（电）','EA18G' #}
-    option = {
+        option = {
         backgroundColor:	'#ECF5FF',
         title: {
             text: '指标与能效关系分析（全）'
@@ -189,7 +148,7 @@
             trigger: 'axis'
         },
         legend: {
-            data: ['有人机', '攻击僚机', '诱饵僚机', 'F35-C', 'E2D', '预警机', 'EA18G']
+            data: ['探测打击平台', '火力打击平台', '预警平台', '歼35']
         },
         grid: {
             left: '3%',
@@ -216,7 +175,7 @@
         },
         series: [
             {
-                name: '有人机',
+                name: '探测打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
                 data: y1,
@@ -230,7 +189,7 @@
 
             },
             {
-                name: '攻击僚机',
+                name: '火力打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
                 data: y2,
@@ -241,15 +200,8 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: 'Video Ads',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: [150, 232, 201, 154, 190, 330, 410],#}
-            {#  smooth: true#}
-            {##}
             {
-                name: '诱饵僚机',
+                name: '预警平台',
                 type: 'line',
                 {#stack: 'Total',#}
                 data: y3,
@@ -260,15 +212,8 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: '诱饵僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y4,#}
-            {#  smooth: true#}
-            {##}
             {
-                name: 'F35-C',
+                name: '歼35',
                 type: 'line',
                 {#stack: 'Total',#}
                 data: y5,
@@ -279,61 +224,19 @@
                 width: 6}
                 }
             },
-            {
-                name: 'E2D',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: y6,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {
-                name: '预警机',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: y7,
-                smooth: true,
-                symbolSize:20,
-                symbol:'triangle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {#{#}
-            {#  name: '攻击僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y8,#}
-            {#  smooth: true#}
-            {##}
-            {
-                name: 'EA18G',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: y9,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            }
         ]
     };
+
         option1 = {
         backgroundColor:	'#ECF5FF',
         title: {
-            text: '指标与能效关系分析(红)'
+            text: '指标与能效关系分析（红）'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: ['有人机', '攻击僚机', '诱饵僚机', 'F35-C', 'E2D', '预警机', 'EA18G']
+            data: ['探测打击平台', '火力打击平台', '预警平台', '歼35']
         },
         grid: {
             left: '3%',
@@ -360,10 +263,10 @@
         },
         series: [
             {
-                name: '有人机',
+                name: '探测打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yr1,
+                data: y1,
                 smooth: true,
                 symbol:'triangle',
                 symbolSize:12,
@@ -374,10 +277,10 @@
 
             },
             {
-                name: '攻击僚机',
+                name: '火力打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yr2,
+                data: y2,
                 smooth: true,
                 symbolSize:20,
                 symbol:'triangle',
@@ -385,18 +288,11 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: 'Video Ads',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: [150, 232, 201, 154, 190, 330, 410],#}
-            {#  smooth: true#}
-            {##}
             {
-                name: '诱饵僚机',
+                name: '预警平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yr3,
+                data: y3,
                 smooth: true,
                 symbolSize:20,
                 symbol:'triangle',
@@ -404,18 +300,11 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: '诱饵僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y4,#}
-            {#  smooth: true#}
-            {##}
             {
-                name: 'F35-C',
+                name: '歼35',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yr5,
+                data: y5,
                 smooth: true,
                 symbolSize:20,
                 symbol:'circle',
@@ -423,61 +312,19 @@
                 width: 6}
                 }
             },
-            {
-                name: 'E2D',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yr6,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {
-                name: '预警机',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yr7,
-                smooth: true,
-                symbolSize:20,
-                symbol:'triangle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {#{#}
-            {#  name: '攻击僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y8,#}
-            {#  smooth: true#}
-            {##}
-            {
-                name: 'EA18G',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yr9,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            }
         ]
     };
-            option2 = {
+
+        option2 = {
         backgroundColor:	'#ECF5FF',
         title: {
-            text: '指标与能效关系分析(蓝)'
+            text: '指标与能效关系分析（蓝）'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: ['有人机', '攻击僚机', '诱饵僚机', 'F35-C', 'E2D', '预警机', 'EA18G']
+            data: ['探测打击平台', '火力打击平台', '预警平台', '歼35']
         },
         grid: {
             left: '3%',
@@ -504,10 +351,10 @@
         },
         series: [
             {
-                name: '有人机',
+                name: '探测打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yb1,
+                data: y1,
                 smooth: true,
                 symbol:'triangle',
                 symbolSize:12,
@@ -518,10 +365,10 @@
 
             },
             {
-                name: '攻击僚机',
+                name: '火力打击平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yb2,
+                data: y2,
                 smooth: true,
                 symbolSize:20,
                 symbol:'triangle',
@@ -529,18 +376,11 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: 'Video Ads',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: [150, 232, 201, 154, 190, 330, 410],#}
-            {#  smooth: true#}
-            {##}
             {
-                name: '诱饵僚机',
+                name: '预警平台',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yb3,
+                data: y3,
                 smooth: true,
                 symbolSize:20,
                 symbol:'triangle',
@@ -548,18 +388,11 @@
                 width: 6}
                 }
             },
-            {#{#}
-            {#  name: '诱饵僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y4,#}
-            {#  smooth: true#}
-            {##}
             {
-                name: 'F35-C',
+                name: '歼35',
                 type: 'line',
                 {#stack: 'Total',#}
-                data: yb5,
+                data: y5,
                 smooth: true,
                 symbolSize:20,
                 symbol:'circle',
@@ -567,51 +400,11 @@
                 width: 6}
                 }
             },
-            {
-                name: 'E2D',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yb6,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {
-                name: '预警机',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yb7,
-                smooth: true,
-                symbolSize:20,
-                symbol:'triangle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            },
-            {#{#}
-            {#  name: '攻击僚机（电）',#}
-            {#  type: 'line',#}
-            {#  stack: 'Total',#}
-            {#  data: y8,#}
-            {#  smooth: true#}
-            {##}
-            {
-                name: 'EA18G',
-                type: 'line',
-                {#stack: 'Total',#}
-                data: yb9,
-                smooth: true,
-                symbolSize:20,
-                symbol:'circle',
-                lineStyle: { normal:{
-                width: 6}
-                }
-            }
         ]
     };
+
+
+
 
     option && myChart.setOption(option);
     window.onresize = myChart.resize;

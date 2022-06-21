@@ -132,84 +132,45 @@ def get_dict_attr2(obj, attr):
         page_string = mark_safe("".join(page_str_list))
         return page_string
     else:
-        if (obj.get(attr) == "1"):
+        if (obj.get(attr) == "good"):
             strs = """
-     <div class="radio">
-                                      <label>
-                                        <input type="radio" name="eval{0}"  value="1" checked>
-                                        1
-                                      </label>
-                                  </div>
-                                    <div class="radio">
-                                      <label>
-                                        <input type="radio" name="eval{0}"  value="2">
-                                        2
-                                      </label>
-                                    </div>
-                                                                    <div class="radio">
-                                      <label>
-                                        <input type="radio" name="eval{0}"  value="3">
-                                        3
-                                      </label>
-                                    </div>
-                                                                    <div class="radio">
-                                      <label>
-                                        <input type="radio" name="eval{0}"  value="4">
-                                        4
-                                      </label>
-                                    </div>
-            """.format(obj.get("frameId"))
-        elif (obj.get(attr) == "2"):
+         <div class="radio">
+                                          <label>
+                                            <input type="radio" name="eval{0}"  value="good" checked form="choose">
+                                            good
+                                          </label>
+                                      </div>
+                                        <div class="radio">
+                                          <label>
+                                            <input type="radio" name="eval{0}"  value="bad" form="choose">
+                                            bad
+                                          </label>
+                                        </div>
+                                                                        <div class="radio">
+                                          <label>
+                                            <input type="radio" name="eval{0}"  value="unknown" form="choose">
+                                            unknown
+                                          </label>
+                                        </div>
+                """.format(obj.get("frameId"))
+        elif (obj.get(attr) == "bad"):
             strs = """
             <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="1" form="choose">
-                                               1
+                                               <input type="radio" name="eval{0}"  value="good"  form="choose">
+                                               good
                                              </label>
                                          </div>
                                            <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="2" checked form="choose">
-                                               2
+                                               <input type="radio" name="eval{0}"  value="bad" form="choose" checked>
+                                               bad
                                              </label>
                                            </div>
                                                                            <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="3" form="choose">
-                                               3
-                                             </label>
-                                           </div>
-                                                                           <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="4" form="choose">
-                                               4
-                                             </label>
-                                           </div>
-                   """.format(obj.get("frameId"))
-        elif (obj.get(attr) == "3"):
-            strs = """
-            <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="1" form="choose">
-                                               1
-                                             </label>
-                                         </div>
-                                           <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="2" form="choose">
-                                               2
-                                             </label>
-                                           </div>
-                                                                           <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="3" checked form="choose">
-                                               3
-                                             </label>
-                                           </div>
-                                                                           <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="4" form="choose">
-                                               4
+                                               <input type="radio" name="eval{0}"  value="unknown" form="choose">
+                                               unknown
                                              </label>
                                            </div>
                    """.format(obj.get("frameId"))
@@ -217,26 +178,20 @@ def get_dict_attr2(obj, attr):
             strs = """
             <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="1" form="choose">
-                                               1
+                                               <input type="radio" name="eval{0}"  value="good"  form="choose">
+                                               good
                                              </label>
                                          </div>
                                            <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="2" form="choose">
-                                               2
+                                               <input type="radio" name="eval{0}"  value="bad" form="choose" >
+                                               bad
                                              </label>
                                            </div>
                                                                            <div class="radio">
                                              <label>
-                                               <input type="radio" name="eval{0}"  value="3" form="choose">
-                                               3
-                                             </label>
-                                           </div>
-                                                                           <div class="radio">
-                                             <label>
-                                               <input type="radio" name="eval{0}"  value="4" checked form="choose">
-                                               4
+                                               <input type="radio" name="eval{0}"  value="unknown" form="choose" checked>
+                                               unknown
                                              </label>
                                            </div>
                    """.format(obj.get("frameId"))
@@ -254,3 +209,10 @@ def deal_tag(obj):
 
     measurement = obj[5:]
     return measurement
+
+# @register.filter
+# def deal_key(obj):
+#
+#     measurement = ""
+#     measurement = "…Á»∫"+str(obj)
+#     return measurement
